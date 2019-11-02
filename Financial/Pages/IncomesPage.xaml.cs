@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -28,6 +29,7 @@ namespace Financial.Pages
             if (SearchBar.IsVisible == true)
             {
                 SearchBar.IsVisible = false;
+                MonthYearPicker.IsVisible = ValuesOverview.IsVisible = true;
                 SearchBar.Text = "";
                 Shell.SetNavBarIsVisible(this, true);
                 return true;
@@ -42,13 +44,11 @@ namespace Financial.Pages
         {
             Shell.SetNavBarIsVisible(this, false);
             SearchBar.IsVisible = true;
+            MonthYearPicker.IsVisible = ValuesOverview.IsVisible = false;
             SearchBar.Focus();
         }
 
-        private void OnSearchBarTextChanged(object sender, TextChangedEventArgs e)
-        {
-            //ViewModel.Search();
-        }
+        private void OnSearchBarTextChanged(object sender, TextChangedEventArgs e) => ViewModel.Search();
 
         private void OnSearchBarUnfocused(object sender, FocusEventArgs e) => OnBackButtonPressed();
 
@@ -57,6 +57,7 @@ namespace Financial.Pages
 
     class IncomesPageViewModel : ViewModelBase
     {
+        private ObservableCollection<Movement> IncomesBackup { get; set; }
         private ObservableCollection<Movement> _incomes;
         public ObservableCollection<Movement> Incomes
         {
@@ -71,8 +72,9 @@ namespace Financial.Pages
         public string SearchParameter { get; set; }
 
         public ICommand OpenAddMovementPopupSaveIncomeCommand { get; set; }
-        public ICommand OpenViewMovementPopupIncomeCommand { get; set; }
+        public ICommand OpenMovementDetailsPopupIncomeCommand { get; set; }
         public ICommand OpenMoreOptionsActionSheetCommand { get; set; }
+        public ICommand HandAllTithesCommand { get; set; }
 
         /// UI
         private bool _tipIsVisible;
@@ -95,6 +97,83 @@ namespace Financial.Pages
             {
                 _incomesIsVisible = value;
                 Notify("IncomesIsVisible");
+            }
+        }
+
+        private string _revenues;
+        public string Revenues
+        {
+            get => _revenues;
+            set
+            {
+                _revenues = value;
+                Notify("Revenues");
+            }
+        }
+
+        private string _remainingTithes;
+        public string RemainingTithes
+        {
+            get => _remainingTithes;
+            set
+            {
+                _remainingTithes = value;
+                Notify("RemainingTithes");
+            }
+        }
+
+        private string _totalTithes;
+        public string TotalTithes
+        {
+            get => _totalTithes;
+            set
+            {
+                _totalTithes = value;
+                Notify("TotalTithes");
+            }
+        }
+
+        private bool _handAllTithesIsEnabled;
+        public bool HandAllTithesIsEnabled
+        {
+            get => _handAllTithesIsEnabled;
+            set
+            {
+                _handAllTithesIsEnabled = value;
+                Notify("HandAllTithesIsEnabled");
+            }
+        }
+
+        private string _handAllTithesButtonColor;
+        public string HandAllTithesButtonColor
+        {
+            get => _handAllTithesButtonColor;
+            set
+            {
+                _handAllTithesButtonColor = value;
+                Notify("HandAllTithesButtonColor");
+            }
+        }
+
+        private bool _valuesOverviewWithTithes;
+        public bool ValuesOverviewWithTithes
+        {
+            get => _valuesOverviewWithTithes;
+            set
+            {
+                _valuesOverviewWithTithes = value;
+                Notify("ValuesOverviewWithTithes");
+            }
+        }
+
+        private bool _valuesOverviewWithRevenuesOnly;
+        public bool ValuesOverviewWithRevenuesOnly
+        {
+            get => _valuesOverviewWithRevenuesOnly;
+            set
+            {
+                _valuesOverviewWithRevenuesOnly = value;
+                Notify("ValuesOverviewWithRevenuesOnly");
             }
         }
         /// UI
@@ -125,8 +204,12 @@ namespace Financial.Pages
         public IncomesPageViewModel()
         {
             OpenAddMovementPopupSaveIncomeCommand = new Command(OpenAddMovementPopupSaveIncome);
-            OpenViewMovementPopupIncomeCommand = new Command<Movement>(OpenViewMovementPopupIncome);
+            OpenMovementDetailsPopupIncomeCommand = new Command<Movement>(OpenMovementDetailsPopupIncome);
             OpenMoreOptionsActionSheetCommand = new Command<Movement>(OpenMoreOptionsActionSheet);
+            HandAllTithesCommand = new Command(HandAllTithes);
+
+            ValuesOverviewWithTithes = App.UserGivesTithes;
+            ValuesOverviewWithRevenuesOnly = !ValuesOverviewWithTithes;
 
             //MonthYearPickerItemsSource = new List<string>();
             Incomes = new ObservableCollection<Movement>();
@@ -230,10 +313,27 @@ namespace Financial.Pages
                         if (item.Date_Display_Filter == MonthYearPickerSelectedItem)
                             incomes.Add(item);
                     }
-                    Incomes = new ObservableCollection<Movement>(incomes);
+                    IncomesBackup = Incomes = new ObservableCollection<Movement>(incomes);
                 }
                 else
-                    Incomes = new ObservableCollection<Movement>();
+                    IncomesBackup = Incomes = new ObservableCollection<Movement>();
+            } catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
+
+            try
+            {
+                var revenues = Incomes.Sum(i => i.Value);
+                var remainingTithes = Incomes.Where(i => i.IsTitheable == true).Where(i => i.Handed == false).Sum(i => i.Value) * 0.1;
+                var totalTithes = revenues * 0.1;
+
+                Revenues = revenues.ToString("C", CultureInfo.CurrentCulture);
+                RemainingTithes = remainingTithes.ToString("C", CultureInfo.CurrentCulture);
+                TotalTithes = totalTithes.ToString("C", CultureInfo.CurrentCulture);
+
+                HandAllTithesIsEnabled = remainingTithes > 0 ? true : false;
+                HandAllTithesButtonColor = HandAllTithesIsEnabled ? ((Color)Application.Current.Resources["PrimaryColor"]).ToHex() : Color.LightGray.ToHex();
             } catch (Exception ex)
             {
                 Debug.WriteLine(ex);
@@ -249,7 +349,7 @@ namespace Financial.Pages
             PopupNavigation.Instance.PushAsync(popupPage);
         }
 
-        private async void OpenViewMovementPopupIncome(Movement Income) => await PopupNavigation.Instance.PushAsync(new MovementDetailsPopup(Income));
+        private async void OpenMovementDetailsPopupIncome(Movement Income) => await PopupNavigation.Instance.PushAsync(new MovementDetailsPopup(Income));
 
         public async void OpenMoreOptionsActionSheet(Movement Income)
         {
@@ -296,6 +396,34 @@ namespace Financial.Pages
                     break;
                 default:
                     break;
+            }
+        }
+
+        public void Search()
+        {
+            if (string.IsNullOrEmpty(SearchParameter))
+                Incomes = new ObservableCollection<Movement>(IncomesBackup);
+            else
+            {
+                var words = App.NormalizeCharacters(SearchParameter.ToLower()).Split(' ');
+                Incomes = new ObservableCollection<Movement>(IncomesBackup.Where(i => words.All(w => App.NormalizeCharacters(i.Description.ToLower()).Contains(w))));
+            }
+        }
+
+        private async void HandAllTithes()
+        {
+            if (await Application.Current.MainPage.DisplayAlert(RemainingTithes, "Entregar dízimos neste valor?", "Sim", "Não"))
+            {
+                foreach (var i in Incomes)
+                {
+                    using (var trans = App.Realm.BeginWrite())
+                    {
+                        i.Handed = true;
+                        trans.Commit();
+                    }
+                }
+                UpdateCollection();
+                App.Toast("Dízimos entregues.");
             }
         }
     }

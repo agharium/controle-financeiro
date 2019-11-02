@@ -36,6 +36,16 @@ namespace Financial
                 DependencyService.Get<IToastMessage>().LongAlert(message);
         }
 
+        public static string NormalizeCharacters(string text)
+        {
+            string accentedCharacters = "ÄÅÁÂÀÃäáâàãÉÊËÈéêëèÍÎÏÌíîïìÖÓÔÒÕöóôòõÜÚÛüúûùÇç";
+            string normalCharacters = "AAAAAAaaaaaEEEEeeeeIIIIiiiiOOOOOoooooUUUuuuuCc";
+
+            for (int i = 0; i < accentedCharacters.Length; i++)
+                text = text.Replace(accentedCharacters[i].ToString(), normalCharacters[i].ToString());
+            return text;
+        }
+
         public App()
         {
             DependencyService.Register<IToastMessage>();

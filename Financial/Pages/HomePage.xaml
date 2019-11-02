@@ -8,58 +8,104 @@
              Title="Home">
     <ContentPage.Content>
         <StackLayout Spacing="0">
-            <Frame
-                Margin="20, 20, 20, 10"
-                Padding="0"
-                CornerRadius="10"
+            <Picker 
+                x:Name="MonthYearPicker"
+                Title="Mês/ano"
+                FontSize="Medium"
                 HorizontalOptions="FillAndExpand"
-                VerticalOptions="FillAndExpand"
-                BackgroundColor="{StaticResource IncomesColor}">
-                <StackLayout Spacing="0">
-                    <Label
-                        Text="Entradas"
-                        TextColor="White"
-                        Padding="10"/>
-                    <Label 
-                        Text="R$ 0,00"
-                        TextColor="White"
-                        FontSize="44"
-                        HorizontalTextAlignment="Center"
-                        VerticalTextAlignment="Center"
-                        VerticalOptions="CenterAndExpand"/>
-                    <Label
-                        Text="Acessar"
-                        TextColor="White"
-                        Padding="10"
-                        HorizontalOptions="End"/>
-                </StackLayout>
-            </Frame>
-            <Frame
-                Margin="20, 10, 20, 20"
-                Padding="0"
-                CornerRadius="10"
-                HorizontalOptions="FillAndExpand"
-                VerticalOptions="FillAndExpand"
-                BackgroundColor="{StaticResource ExpensesColor}">
-                <StackLayout Spacing="0">
-                    <Label
-                        Text="Despesas"
-                        TextColor="White"
-                        Padding="10"/>
-                    <Label 
-                        Text="R$ 0,00"
-                        TextColor="White"
-                        FontSize="44"
-                        HorizontalTextAlignment="Center"
-                        VerticalTextAlignment="Center"
-                        VerticalOptions="CenterAndExpand"/>
-                    <Label
-                        Text="Acessar"
-                        TextColor="White"
-                        Padding="10"
-                        HorizontalOptions="End"/>
-                </StackLayout>
-            </Frame>
+                VerticalOptions="Center"
+                Margin="20, 5, 20, 5"/>
+            <Grid VerticalOptions="FillAndExpand">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="1.5*"/>
+                </Grid.RowDefinitions>
+                <Frame
+                    Margin="20, 5, 20, 7.5"
+                    Padding="0"
+                    CornerRadius="10"
+                    HorizontalOptions="FillAndExpand"
+                    VerticalOptions="FillAndExpand"
+                    BackgroundColor="{StaticResource IncomesColor}"
+                    Grid.Row="0">
+                    <StackLayout Spacing="0">
+                        <Label
+                            Text="Entradas"
+                            TextColor="White"
+                            HorizontalOptions="Center"
+                            Margin="10"/>
+                        <Label 
+                            Text="R$ 0,00"
+                            TextColor="White"
+                            FontSize="44"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            VerticalOptions="CenterAndExpand"/>
+                        <ImageButton
+                            Source="icon_sign_in"
+                            WidthRequest="20"
+                            BackgroundColor="Transparent"
+                            HorizontalOptions="End"
+                            Margin="0, 0, 10, 10"
+                            Command="{Binding GoToIncomesPageCommand}"/>
+                    </StackLayout>
+                </Frame>
+                <Frame
+                    Margin="20, 7.5, 20, 7.5"
+                    Padding="0"
+                    CornerRadius="10"
+                    HorizontalOptions="FillAndExpand"
+                    VerticalOptions="FillAndExpand"
+                    BackgroundColor="{StaticResource ExpensesColor}"
+                    Grid.Row="1">
+                    <StackLayout Spacing="0">
+                        <Label
+                            Text="Despesas"
+                            TextColor="White"
+                            HorizontalOptions="Center"
+                            Margin="10"/>
+                        <Label 
+                            Text="R$ 0,00"
+                            TextColor="White"
+                            FontSize="44"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            VerticalOptions="CenterAndExpand"/>
+                        <ImageButton
+                            Source="icon_sign_in"
+                            WidthRequest="20"
+                            BackgroundColor="Transparent"
+                            HorizontalOptions="End"
+                            Margin="0, 0, 10, 10"
+                            Command="{Binding GoToExpensesPageCommand}"/>
+                    </StackLayout>
+                </Frame>
+                <Frame
+                    Margin="20, 7.5, 20, 20"
+                    Padding="0"
+                    CornerRadius="10"
+                    HorizontalOptions="FillAndExpand"
+                    VerticalOptions="FillAndExpand"
+                    BackgroundColor="{StaticResource PrimaryColor}"
+                    Grid.Row="2">
+                    <StackLayout 
+                        Spacing="10"
+                        Padding="10">
+                        <Label
+                            Text="Saldo"
+                            TextColor="White"
+                            HorizontalOptions="Center"/>
+                        <Label 
+                            Text="R$ 0,00"
+                            TextColor="White"
+                            FontSize="30"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            VerticalOptions="CenterAndExpand"/>
+                    </StackLayout>
+                </Frame>
+            </Grid>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

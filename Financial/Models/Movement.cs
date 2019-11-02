@@ -23,20 +23,20 @@ namespace Financial.Models
         {
             get => Value.ToString("C", CultureInfo.CurrentCulture);
         }
-        [Ignored]
+        /*[Ignored]
         public string Description_ToString
         {
             get => string.IsNullOrEmpty(Description) ? "" : Description;
-        }
+        }*/
         [Ignored]
         public string Description_Display
         {
             get
             {
-                if (Description_ToString.Length > 20)
-                    return Description_ToString.Substring(0, Math.Min(Description_ToString.Length, 20)) + "...";
+                if (Description.Length > 20)
+                    return Description.Substring(0, Math.Min(Description.Length, 20)) + "...";
                 else
-                    return Description_ToString;
+                    return Description;
             }
         }
         [Ignored]

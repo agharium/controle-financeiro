@@ -35,7 +35,7 @@ namespace Financial.Pages.Popups
             Value = Movement.Value_Display;
             Date = Movement.Date_Display;
 
-            TithesIsVisible = Movement.Type == App.INCOME && Movement.IsTitheable && App.UserGivesTithes;
+            TithesIsVisible = App.UserGivesTithes && Movement.Type == App.INCOME && Movement.IsTitheable;
             if (TithesIsVisible)
             {
                 Tithes = Movement.Tithes_Display.Remove(0, 6);

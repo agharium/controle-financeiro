@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.Globalization;
+﻿using System.Windows.Input;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -13,9 +11,19 @@ namespace Financial.Pages
         {
             InitializeComponent();
 
-            var now = DateTimeOffset.Now;
-            Debug.WriteLine(CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(11));
-            Debug.WriteLine(now.ToString("MMMM", CultureInfo.CurrentCulture));
+            BindingContext = new HomePageViewModel();
+        }
+    }
+
+    class HomePageViewModel : ViewModelBase
+    {
+        public ICommand GoToIncomesPageCommand { get; set; }
+        public ICommand GoToExpensesPageCommand { get; set; }
+
+        public HomePageViewModel()
+        {
+            GoToIncomesPageCommand = new Command(async () => await Shell.Current.GoToAsync("//incomes"));
+            GoToExpensesPageCommand = new Command(async () => await Shell.Current.GoToAsync("//expenses"));
         }
     }
 }
