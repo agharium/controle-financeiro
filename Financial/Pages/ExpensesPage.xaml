@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="Financial.Pages.ExpensesPage"
+             Title="Despesas">
+    <ContentPage.Content>
+        <StackLayout Spacing="0">
+            <CollectionView
+                ItemsSource="{Binding Expenses}"
+                EmptyView="Toque em + para adicionar um gasto"
+                SelectionMode="Single">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="10, 10, 10, 0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Label
+                                Text="{Binding Value_Display}"
+                                FontSize="Large"
+                                TextColor="{StaticResource TextDarkColor}"
+                                Grid.Column="0"
+                                Grid.Row="0"/>
+                            <Label
+                                Text="{Binding Description_Display}"
+                                FontSize="16"
+                                Grid.Column="0"
+                                Grid.Row="1"/>
+                            <Label
+                                Text="{Binding Date_Display}"
+                                HorizontalOptions="End"
+                                Grid.Column="1"
+                                Grid.Row="1"/>
+                            <!--<Image
+                                Source="icon_options"
+                                HorizontalOptions="End"
+                                WidthRequest="21"
+                                Grid.Column="2"
+                                Grid.Row="0">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer 
+                                        Command="{Binding Source={x:Reference this}, Path=BindingContext.MoreOptionsCommand}"
+                                        CommandParameter="{Binding .}"/>
+                                </Image.GestureRecognizers>
+                            </Image>
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding Source={x:Reference this}, Path=BindingContext.ViewIncomeCommand}"
+                                    CommandParameter="{Binding .}"/>
+                            </Grid.GestureRecognizers>-->
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+                <CollectionView.Footer>
+                    <StackLayout HeightRequest="10"/>
+                </CollectionView.Footer>
+            </CollectionView>
+            <!--<ImageButton 
+                Source="icon_expenses_plus_round.png"
+                Scale="0.7"
+                BackgroundColor="Transparent"
+                AbsoluteLayout.LayoutFlags="PositionProportional"  
+                AbsoluteLayout.LayoutBounds=".95, .95, 80, 80"/>-->
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

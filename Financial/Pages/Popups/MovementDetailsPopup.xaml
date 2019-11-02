@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<pages:PopupPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+    x:Class="Financial.Pages.Popups.MovementDetailsPopup"
+    CloseWhenBackgroundIsClicked="True">
+    <AbsoluteLayout
+        HorizontalOptions="FillAndExpand"
+        VerticalOptions="Center">
+        <Frame
+            BackgroundColor="White"
+            Margin="15, 15, 15, 0"
+            Padding="0"
+            HasShadow="False"
+            AbsoluteLayout.LayoutFlags="All"
+            AbsoluteLayout.LayoutBounds="1, 1, 1, 1">
+            <StackLayout
+                Padding="15"
+                Spacing="0">
+                <Label 
+                    Text="Valor"/>
+                <Label 
+                    Text="{Binding Value}"
+                    FontSize="Medium"
+                    TextColor="{StaticResource TextDarkColor}"
+                    Margin="0, 0, 0, 10"/>
+                <Label 
+                    Text="Descrição"/>
+                <Label 
+                    Text="{Binding Description}"
+                    FontSize="Medium"
+                    TextColor="{StaticResource TextDarkColor}"
+                    Margin="0, 0, 0, 10"/>
+                <Label 
+                    Text="Data"/>
+                <Label 
+                    Text="{Binding Date}"
+                    FontSize="Medium"
+                    TextColor="{StaticResource TextDarkColor}"
+                    Margin="0, 0, 0, 10"/>
+                <StackLayout IsVisible="{Binding TithesIsVisible}">
+                    <Label 
+                        Text="Dízimo"/>
+                    <Label 
+                        Text="{Binding Tithes}"
+                        FontSize="Medium"
+                        TextColor="{StaticResource TextDarkColor}"
+                        Margin="0, 0, 0, 10"/>
+                    <Label 
+                        Text="Status"/>
+                    <Label 
+                        Text="{Binding HandedStatus}"
+                        FontSize="Medium"
+                        TextColor="{StaticResource TextDarkColor}"
+                        Margin="0, 0, 0, 10"/>
+                </StackLayout>
+            </StackLayout>
+        </Frame>
+        <ContentView
+            Margin="0, 5, 5, 0"
+            AbsoluteLayout.LayoutFlags="PositionProportional"
+            AbsoluteLayout.LayoutBounds="1, 0, -1, -1">
+            <ContentView.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnCloseButtonTapped"/>
+            </ContentView.GestureRecognizers>
+            <Image
+                HeightRequest="25"
+                WidthRequest="25"
+                Source="icon_x_round_red"/>
+        </ContentView>
+    </AbsoluteLayout>
+</pages:PopupPage>

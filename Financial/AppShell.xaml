@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Shell 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:pages="clr-namespace:Financial.Pages"
+    mc:Ignorable="d"
+    x:Class="Financial.AppShell">
+
+    <Shell.Resources>
+        <Style 
+            x:Key="BaseStyle" 
+            TargetType="Element">
+            <Setter 
+                Property="Shell.BackgroundColor" 
+                Value="{StaticResource PrimaryColor}" />
+            <Setter 
+                Property="Shell.ForegroundColor" 
+                Value="White" />
+            <Setter
+                Property="Shell.TitleColor" 
+                Value="White" />
+            <Setter
+                Property="Shell.DisabledColor" 
+                Value="#B4FFFFFF" />
+            <Setter
+                Property="Shell.UnselectedColor" 
+                Value="#95FFFFFF" />
+        </Style>
+        <Style 
+            TargetType="ShellItem" 
+            BasedOn="{StaticResource BaseStyle}" />
+        <Style 
+            TargetType="ShellContent" 
+            BasedOn="{StaticResource BaseStyle}" />
+    </Shell.Resources>
+
+    <Shell.FlyoutHeaderTemplate>
+        <DataTemplate>
+            <StackLayout 
+                BackgroundColor="{StaticResource PrimaryColor}"
+                Padding="20">
+                <Image
+                    Source="logo.png"
+                    HeightRequest="125"
+                    WidthRequest="125"
+                    HorizontalOptions="Center"/>
+                <Label 
+                    Text="Controle Financeiro"
+                    FontSize="Large"
+                    TextColor="White" 
+                    FontAttributes="Bold" 
+                    HorizontalTextAlignment="Center"
+                    VerticalTextAlignment="Center"/>
+            </StackLayout>
+        </DataTemplate>
+    </Shell.FlyoutHeaderTemplate>
+
+    <FlyoutItem Title="Home">
+        <ShellContent ContentTemplate="{DataTemplate pages:HomePage}"/>
+    </FlyoutItem>
+    
+    <FlyoutItem FlyoutDisplayOptions="AsMultipleItems">
+        <ShellContent
+            Title="Entradas"
+            Icon="icon_money"
+            ContentTemplate="{DataTemplate pages:IncomesPage}"/>
+        <ShellContent
+            Title="Despesas"
+            Icon="icon_hand_money"
+            ContentTemplate="{DataTemplate pages:ExpensesPage}"/>
+    </FlyoutItem>
+    
+</Shell>

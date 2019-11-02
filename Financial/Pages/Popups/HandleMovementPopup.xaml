@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<pages:PopupPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+    mc:Ignorable="d"
+    x:Class="Financial.Pages.Popups.HandleMovementPopup"
+    CloseWhenBackgroundIsClicked="True">
+    <AbsoluteLayout
+        HorizontalOptions="FillAndExpand"
+        VerticalOptions="Center">
+        <Frame
+            BackgroundColor="White"
+            Margin="15, 15, 15, 0"
+            Padding="0"
+            HasShadow="False"
+            AbsoluteLayout.LayoutFlags="All"
+            AbsoluteLayout.LayoutBounds="1, 1, 1, 1">
+            <StackLayout Padding="15">
+                <Label
+                    Text="{Binding Title}"
+                    FontSize="Medium"
+                    TextColor="#262626"
+                    HorizontalOptions="Center"/>
+                <Entry
+                    Text="{Binding Value}"
+                    HorizontalOptions="Fill"
+                    Placeholder="Valor"
+                    Keyboard="Numeric"/>
+                <Entry
+                    Text="{Binding Description}"
+                    HorizontalOptions="Fill"
+                    Placeholder="Descrição"
+                    Keyboard="Text"/>
+                <DatePicker 
+                    Date="{Binding Date}"
+                    MaximumDate="{Binding TodayDate}"
+                    HorizontalOptions="Fill"/>
+                <StackLayout 
+                    Orientation="Horizontal"
+                    IsVisible="{Binding IsTitheableVisible}">
+                    <CheckBox IsChecked="{Binding IsTitheable}"/>
+                    <Label 
+                        Text="Entregar dízimos desta entrada"
+                        VerticalTextAlignment="Center"/>
+                </StackLayout>
+                <Button
+                    Text="Salvar"
+                    TextColor="White"
+                    BackgroundColor="{StaticResource PrimaryColor}"
+                    HorizontalOptions="Fill"
+                    HeightRequest="40"
+                    Margin="2.5"
+                    Command="{Binding SaveMovementCommand}"/>
+            </StackLayout>
+        </Frame>
+        <ContentView
+            Margin="0, 5, 5, 0"
+            AbsoluteLayout.LayoutFlags="PositionProportional"
+            AbsoluteLayout.LayoutBounds="1, 0, -1, -1">
+            <ContentView.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnCloseButtonTapped"/>
+            </ContentView.GestureRecognizers>
+            <Image
+                HeightRequest="25"
+                WidthRequest="25"
+                Source="icon_x_round_red"/>
+        </ContentView>
+    </AbsoluteLayout>
+</pages:PopupPage>
