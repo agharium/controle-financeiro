@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Financial.Pages;
+using System.ComponentModel;
 using Xamarin.Forms;
 
 namespace Financial
@@ -11,6 +12,9 @@ namespace Financial
         public AppShell()
         {
             InitializeComponent();
+
+            Routing.RegisterRoute("incomes", typeof(IncomesPage));
+            Routing.RegisterRoute("expenses", typeof(ExpensesPage));
         }
     }
 }

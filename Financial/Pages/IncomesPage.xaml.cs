@@ -4,7 +4,6 @@ using Rg.Plugins.Popup.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Input;
@@ -14,8 +13,16 @@ using Xamarin.Forms.Xaml;
 namespace Financial.Pages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
+    [QueryProperty("Filter", "filter")]
     public partial class IncomesPage : ContentPage
     {
+        private string _filter;
+        public string Filter
+        {
+            get => _filter;
+            set => _filter = Uri.UnescapeDataString(value);
+        }
+
         IncomesPageViewModel ViewModel = new IncomesPageViewModel();
         public IncomesPage()
         {
@@ -53,6 +60,13 @@ namespace Financial.Pages
         private void OnSearchBarUnfocused(object sender, FocusEventArgs e) => OnBackButtonPressed();
 
         private void OnMonthYearPickerSelectedIndexChanged(object sender, EventArgs e) => ViewModel.UpdateCollection();
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            if (!string.IsNullOrEmpty(Filter) && ViewModel.MonthYearPickerItemsSource.Contains(Filter))
+                ViewModel.MonthYearPickerSelectedItem = Filter;
+        }
     }
 
     class IncomesPageViewModel : ViewModelBase
@@ -211,7 +225,6 @@ namespace Financial.Pages
             ValuesOverviewWithTithes = App.UserGivesTithes;
             ValuesOverviewWithRevenuesOnly = !ValuesOverviewWithTithes;
 
-            //MonthYearPickerItemsSource = new List<string>();
             Incomes = new ObservableCollection<Movement>();
 
             UpdateCollection(true);
@@ -223,121 +236,49 @@ namespace Financial.Pages
             if (selectLastItemFilter)
                 filterToSelect = App.Realm.All<Movement>().OrderByDescending(i => i.Id).First().Date_Display_Filter;
 
-            try
+            var incomes = App.Realm.All<Movement>().Where(i => i.Type == App.INCOME).OrderByDescending(i => i.Date).ToList();
+            MonthYearPickerItemsSource = incomes.Select(i => i.Date_Display_Filter).Distinct().ToList();
+
+            string whereItIs = MonthYearPickerSelectedItem;
+
+            if (MonthYearPickerItemsSource.Count() > 0)
             {
-                var incomes_aux = App.Realm.All<Movement>().Where(i => i.Type == App.INCOME).OrderByDescending(i => i.Date).ToList();
-
-                /*var toRemove = new List<string>();
-                foreach (var i in MonthYearPickerItemsSource)
-                {
-                    var contains = true;
-                    foreach (var j in incomes_aux)
-                    {
-                        if (i != j.Date_Display_Filter)
-                        {
-                            contains = false;
-                            break;
-                        }
-                    }
-                    if (!contains)
-                        toRemove.Add(i);
-                }
-
-                foreach (var item in toRemove)
-                {
-                    Debug.WriteLine("PRA REMOVER: " + item);
-                    MonthYearPickerItemsSource.Remove(item);
-                }*/
-
-                //MonthYearPickerItemsSource = new List<string>();
-                //MonthYearPickerSelectedItem = null;
-                //MonthYearPickerSelectedIndex = -1;
-
-                string whereItIs = MonthYearPickerSelectedItem;
-
-                List<string> aux = new List<string>();
-                foreach (var i in incomes_aux)
-                {
-                    if (!aux.Contains(i.Date_Display_Filter))
-                        aux.Add(i.Date_Display_Filter);
-                }
-                MonthYearPickerItemsSource = new List<string>(aux);
-
-                if (MonthYearPickerItemsSource.Count() > 0){
-                    if (filterToSelect != null && MonthYearPickerItemsSource.Contains(filterToSelect))
-                    {
-                        MonthYearPickerSelectedItem = filterToSelect;
-                    } else if (tryToStayWhereItIs && whereItIs != null && MonthYearPickerItemsSource.Contains(whereItIs))
-                    {
-                        MonthYearPickerSelectedItem = whereItIs;
-                    } 
-                    else
-                    {
-                        MonthYearPickerSelectedItem = MonthYearPickerItemsSource[0];
-                    }
-                }
+                if (filterToSelect != null && MonthYearPickerItemsSource.Contains(filterToSelect))
+                    MonthYearPickerSelectedItem = filterToSelect;
+                else if (tryToStayWhereItIs && whereItIs != null && MonthYearPickerItemsSource.Contains(whereItIs))
+                    MonthYearPickerSelectedItem = whereItIs;
                 else
-                {
-                    MonthYearPickerSelectedItem = null;
-                }
-
-                /*Debug.WriteLine("ITEMS SOURCE: ");
-                for (int i = 0; i < MonthYearPickerItemsSource.Count(); i++)
-                {
-                    Debug.WriteLine("INDEX: " + i + " - VALUE: " + MonthYearPickerItemsSource[i]);
-                }
-
-                Debug.WriteLine("SELECTED ITEM: " + MonthYearPickerSelectedItem);*/
+                    MonthYearPickerSelectedItem = MonthYearPickerItemsSource[0];
             }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-            }
+            else
+                MonthYearPickerSelectedItem = null;
         }
 
         public void UpdateCollection(bool populatePicker = false, bool selectLastItemFilter = false, bool tryToStayWhereItIs = false)
         {
             if (populatePicker)
                 PopulateMonthYearPicker(selectLastItemFilter, tryToStayWhereItIs);
-            try
-            {
-                var incomes = new List<Movement>();
-                var incomes_aux = App.Realm.All<Movement>().Where(i => i.Type == App.INCOME).OrderByDescending(i => i.Date).ToList();
 
-                if (!string.IsNullOrWhiteSpace(MonthYearPickerSelectedItem))
-                {
-                    //var selectedDate = DateTime.ParseExact(MonthYearPickerSelectedItem, "MMMM/yyyy", CultureInfo.CurrentCulture);
 
-                    foreach (var item in incomes_aux)
-                    {
-                        if (item.Date_Display_Filter == MonthYearPickerSelectedItem)
-                            incomes.Add(item);
-                    }
-                    IncomesBackup = Incomes = new ObservableCollection<Movement>(incomes);
-                }
-                else
-                    IncomesBackup = Incomes = new ObservableCollection<Movement>();
-            } catch (Exception ex)
+            if (!string.IsNullOrWhiteSpace(MonthYearPickerSelectedItem))
             {
-                Debug.WriteLine(ex);
+                var incomes = App.Realm.All<Movement>().Where(i => i.Type == App.INCOME).OrderByDescending(i => i.Date).ToList();
+                incomes = incomes.Where(m => m.Date_Display_Filter == MonthYearPickerSelectedItem).ToList();
+                IncomesBackup = Incomes = new ObservableCollection<Movement>(incomes);
             }
+            else
+                IncomesBackup = Incomes = new ObservableCollection<Movement>();
 
-            try
-            {
-                var revenues = Incomes.Sum(i => i.Value);
-                var remainingTithes = Incomes.Where(i => i.IsTitheable == true).Where(i => i.Handed == false).Sum(i => i.Value) * 0.1;
-                var totalTithes = revenues * 0.1;
+            var revenues = Incomes.Sum(i => i.Value);
+            var remainingTithes = Incomes.Where(i => i.IsTitheable == true).Where(i => i.Handed == false).Sum(i => i.Value) * 0.1;
+            var totalTithes = revenues * 0.1;
 
-                Revenues = revenues.ToString("C", CultureInfo.CurrentCulture);
-                RemainingTithes = remainingTithes.ToString("C", CultureInfo.CurrentCulture);
-                TotalTithes = totalTithes.ToString("C", CultureInfo.CurrentCulture);
+            Revenues = revenues.ToString("C", CultureInfo.CurrentCulture);
+            RemainingTithes = remainingTithes.ToString("C", CultureInfo.CurrentCulture);
+            TotalTithes = totalTithes.ToString("C", CultureInfo.CurrentCulture);
 
-                HandAllTithesIsEnabled = remainingTithes > 0 ? true : false;
-                HandAllTithesButtonColor = HandAllTithesIsEnabled ? ((Color)Application.Current.Resources["PrimaryColor"]).ToHex() : Color.LightGray.ToHex();
-            } catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-            }
+            HandAllTithesIsEnabled = remainingTithes > 0 ? true : false;
+            HandAllTithesButtonColor = HandAllTithesIsEnabled ? ((Color)Application.Current.Resources["PrimaryColor"]).ToHex() : Color.LightGray.ToHex();
 
             TipIsVisible = Incomes.Count() == 0 ? true : false;
         }
@@ -355,18 +296,18 @@ namespace Financial.Pages
         {
             List<string> options = new List<string>();
 
-            if (App.UserGivesTithes && Income.IsTitheable)
+            if (App.UserGivesTithes && Income.IsTitheable && Income.Handed == false)
                 options.Add("Entregar");
 
             options.Add("Editar");
             options.Add("Excluir");
 
-            var actionSheet = await Application.Current.MainPage.DisplayActionSheet("Opções", "Cancelar", null, options.ToArray());
-
+            var actionSheet = await Shell.Current.DisplayActionSheet("Opções", "Cancelar", null, options.ToArray());
+            
             switch (actionSheet)
             {
                 case "Entregar":
-                    if (await Application.Current.MainPage.DisplayAlert(Income.Tithes_Display, "Entregar dízimos referentes a esta entrada?", "Sim", "Não"))
+                    if (await Shell.Current.DisplayAlert(Income.Tithes_Display, "Entregar dízimos referentes a esta entrada?", "Sim", "Não"))
                     {
                         using (var trans = App.Realm.BeginWrite())
                         {
@@ -375,6 +316,9 @@ namespace Financial.Pages
                         }
                         UpdateCollection();
                         App.Toast("Dízimo entregue com sucesso.");
+
+                        var expense = new Movement(App.EXPENSE, Convert.ToDouble(Income.Value * 0.1), "Dízimo de " + Income.Value_Display, DateTime.Now, false);
+                        App.Realm.Write(() => { App.Realm.Add(expense); });
                     }
                     break;
                 case "Editar":
@@ -383,7 +327,8 @@ namespace Financial.Pages
                     await PopupNavigation.Instance.PushAsync(popupPage);
                     break;
                 case "Excluir":
-                    if (await Application.Current.MainPage.DisplayAlert("Confirmação", "Tem certeza que deseja excluir essa entrada?", "Sim", "Não"))
+                    var extra = Income.Handed ? " Esta entrada também representa um dízimo já entregue e há uma despesa registrada referente à sua entrega." : "";
+                    if (await Shell.Current.DisplayAlert("Confirmação", "Tem certeza que deseja excluir esta entrada?" + extra, "Sim", "Não"))
                     {
                         using (var trans = App.Realm.BeginWrite())
                         {
@@ -414,16 +359,24 @@ namespace Financial.Pages
         {
             if (await Application.Current.MainPage.DisplayAlert(RemainingTithes, "Entregar dízimos neste valor?", "Sim", "Não"))
             {
+                double total = 0;
                 foreach (var i in Incomes)
                 {
                     using (var trans = App.Realm.BeginWrite())
                     {
-                        i.Handed = true;
-                        trans.Commit();
+                        if (i.IsTitheable && i.Handed == false)
+                        {
+                            total += i.Value;
+                            i.Handed = true;
+                            trans.Commit();
+                        }
                     }
                 }
                 UpdateCollection();
                 App.Toast("Dízimos entregues.");
+
+                var expense = new Movement(App.EXPENSE, total * 0.1, "Dízimos de " + (total).ToString("C", CultureInfo.CurrentCulture), DateTime.Now, false);
+                App.Realm.Write(() => { App.Realm.Add(expense); });
             }
         }
     }

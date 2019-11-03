@@ -170,8 +170,8 @@
                             HeightRequest="30"
                             Padding="0"
                             VerticalOptions="CenterAndExpand"
-                            IsEnabled="{Binding HandAllTithesIsEnabled}"
-                            Command="{Binding HandAllTithesCommand}"/>
+                            Command="{Binding HandAllTithesCommand}"
+                            IsEnabled="{Binding HandAllTithesIsEnabled}"/>
                     </StackLayout>
                     <StackLayout Grid.Column="2">
                         <Label

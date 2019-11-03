@@ -65,15 +65,29 @@
     
     <FlyoutItem FlyoutDisplayOptions="AsMultipleItems">
         <ShellContent
-            Route="incomes"
             Title="Entradas"
             Icon="icon_money"
             ContentTemplate="{DataTemplate pages:IncomesPage}"/>
         <ShellContent
-            Route="expenses"
             Title="Despesas"
             Icon="icon_hand_money"
             ContentTemplate="{DataTemplate pages:ExpensesPage}"/>
+    </FlyoutItem>
+
+    <FlyoutItem
+        Title="Configurações"
+        Icon="icon_settings">
+        <ShellContent ContentTemplate="{DataTemplate pages:SettingsPage}"/>
+    </FlyoutItem>
+    <FlyoutItem
+        Title="Ajuda"
+        Icon="icon_help">
+        <ShellContent ContentTemplate="{DataTemplate pages:HelpPage}"/>
+    </FlyoutItem>
+    <FlyoutItem
+        Title="Sobre"
+        Icon="icon_about">
+        <ShellContent ContentTemplate="{DataTemplate pages:AboutPage}"/>
     </FlyoutItem>
     
 </Shell>

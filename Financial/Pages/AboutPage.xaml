@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="Financial.Pages.AboutPage"
+             Title="Sobre">
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout
+                Padding="20"
+                Spacing="20">
+                <Label 
+                    Text="Desenvolvido por"
+                    TextColor="#040707"
+                    FontSize="Medium"
+                    HorizontalTextAlignment="Center"/>
+                <Image 
+                    Source="anchor_logo_blue_text"
+                    Aspect="AspectFit"
+                    HeightRequest="250"
+                    HorizontalOptions="Center"/>
+                <Label
+                    Text="Aplicativos, sistemas e websites construídos sob medida."
+                    TextColor="#040707"
+                    FontSize="Large"
+                    HorizontalTextAlignment="Center"/>
+                <StackLayout Spacing="15">
+                    <Label
+                        Text="Entrar em contato:"
+                        FontSize="Body"
+                        HorizontalTextAlignment="Center"/>
+                    <Button
+                        Text="Portfólio"
+                        Command="{Binding OpenPortfolioCommand}"
+                        Style="{StaticResource DefaultButton}"
+                        BackgroundColor="#1496ED"/>
+                    <Button
+                        Text="Whatsapp"
+                        Command="{Binding SendWhatsappCommand}"
+                        Style="{StaticResource DefaultButton}"
+                        BackgroundColor="#22C65B"/>
+                    <Button
+                        Text="E-mail"
+                        Command="{Binding SendEmailCommand}"
+                        Style="{StaticResource DefaultButton}"
+                        BackgroundColor="#FF2B56"/>
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

@@ -11,6 +11,9 @@
             <Picker 
                 x:Name="MonthYearPicker"
                 Title="Mês/ano"
+                ItemsSource="{Binding MonthYearPickerItemsSource}"
+                SelectedItem="{Binding MonthYearPickerSelectedItem}"
+                SelectedIndexChanged="OnMonthYearPickerSelectedIndexChanged"
                 FontSize="Medium"
                 HorizontalOptions="FillAndExpand"
                 VerticalOptions="Center"
@@ -36,15 +39,15 @@
                             HorizontalOptions="Center"
                             Margin="10"/>
                         <Label 
-                            Text="R$ 0,00"
+                            Text="{Binding TotalIncome}"
                             TextColor="White"
-                            FontSize="44"
+                            FontSize="30"
                             HorizontalTextAlignment="Center"
                             VerticalTextAlignment="Center"
                             VerticalOptions="CenterAndExpand"/>
                         <ImageButton
                             Source="icon_sign_in"
-                            WidthRequest="20"
+                            WidthRequest="24"
                             BackgroundColor="Transparent"
                             HorizontalOptions="End"
                             Margin="0, 0, 10, 10"
@@ -66,15 +69,15 @@
                             HorizontalOptions="Center"
                             Margin="10"/>
                         <Label 
-                            Text="R$ 0,00"
+                            Text="{Binding TotalExpense}"
                             TextColor="White"
-                            FontSize="44"
+                            FontSize="30"
                             HorizontalTextAlignment="Center"
                             VerticalTextAlignment="Center"
                             VerticalOptions="CenterAndExpand"/>
                         <ImageButton
                             Source="icon_sign_in"
-                            WidthRequest="20"
+                            WidthRequest="24"
                             BackgroundColor="Transparent"
                             HorizontalOptions="End"
                             Margin="0, 0, 10, 10"
@@ -97,7 +100,7 @@
                             TextColor="White"
                             HorizontalOptions="Center"/>
                         <Label 
-                            Text="R$ 0,00"
+                            Text="{Binding Balance}"
                             TextColor="White"
                             FontSize="30"
                             HorizontalTextAlignment="Center"

@@ -5,72 +5,140 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              x:Class="Financial.Pages.ExpensesPage"
+             x:Name="this"
              Title="Despesas">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem
+            Icon="icon_search_white"
+            Clicked="OnSearchTapped"/>
+        <ToolbarItem
+            Icon="icon_plus_white"
+            Command="{Binding OpenAddMovementPopupSaveExpenseCommand}"/>
+    </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout Spacing="0">
+            <SearchBar 
+                x:Name="SearchBar"
+                Text="{Binding SearchParameter}"
+                TextChanged="OnSearchBarTextChanged"
+                Unfocused="OnSearchBarUnfocused"
+                Placeholder="Pesquisa por descrição"
+                BackgroundColor="{StaticResource PrimaryColor}"
+                TextColor="White"
+                PlaceholderColor="#eee"
+                IsVisible="False"
+                HeightRequest="56"/>
+            <Picker 
+                x:Name="MonthYearPicker"
+                Title="Mês/ano"
+                FontSize="Medium"
+                ItemsSource="{Binding MonthYearPickerItemsSource}"
+                SelectedItem="{Binding MonthYearPickerSelectedItem}"
+                SelectedIndexChanged="OnMonthYearPickerSelectedIndexChanged"
+                HorizontalOptions="FillAndExpand"
+                VerticalOptions="Center"
+                Margin="15, 5, 15, 10"/>
+            <StackLayout
+                HeightRequest="1"
+                BackgroundColor="#ECECEC"/>
+            <StackLayout
+                HorizontalOptions="FillAndExpand"
+                VerticalOptions="FillAndExpand"
+                Margin="25"
+                Spacing="15"
+                IsVisible="{Binding TipIsVisible}">
+                <Label 
+                    Text="Toque em"
+                    FontSize="Medium"
+                    HorizontalOptions="Center"
+                    VerticalOptions="FillAndExpand"
+                    VerticalTextAlignment="End"/>
+                <ImageButton
+                    Source="icon_plus_blue"
+                    HeightRequest="32"
+                    WidthRequest="32"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    BackgroundColor="Transparent"
+                    Command="{Binding OpenAddMovementPopupSaveExpenseCommand}"/>
+                <Label 
+                    Text="para adicionar uma despesa"
+                    FontSize="Medium"
+                    HorizontalOptions="Center"
+                    VerticalOptions="FillAndExpand"
+                    VerticalTextAlignment="Start"/>
+            </StackLayout>
             <CollectionView
                 ItemsSource="{Binding Expenses}"
-                EmptyView="Toque em + para adicionar um gasto"
-                SelectionMode="Single">
+                IsVisible="{Binding ExpensesIsVisible}"
+                SelectionMode="None">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Grid Padding="10, 10, 10, 0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
-                            <Label
-                                Text="{Binding Value_Display}"
-                                FontSize="Large"
-                                TextColor="{StaticResource TextDarkColor}"
-                                Grid.Column="0"
-                                Grid.Row="0"/>
-                            <Label
-                                Text="{Binding Description_Display}"
-                                FontSize="16"
-                                Grid.Column="0"
-                                Grid.Row="1"/>
-                            <Label
-                                Text="{Binding Date_Display}"
-                                HorizontalOptions="End"
-                                Grid.Column="1"
-                                Grid.Row="1"/>
-                            <!--<Image
-                                Source="icon_options"
-                                HorizontalOptions="End"
-                                WidthRequest="21"
-                                Grid.Column="2"
-                                Grid.Row="0">
-                                <Image.GestureRecognizers>
-                                    <TapGestureRecognizer 
-                                        Command="{Binding Source={x:Reference this}, Path=BindingContext.MoreOptionsCommand}"
+                        <StackLayout Spacing="0">
+                            <Grid Padding="10, 10, 10, 0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Label
+                                    Text="{Binding Value_Display}"
+                                    FontSize="Large"
+                                    TextColor="{StaticResource TextDarkColor}"
+                                    Grid.Column="0"
+                                    Grid.Row="0"/>
+                                <Label
+                                    Text="{Binding Description_Display}"
+                                    Grid.Column="0"
+                                    Grid.Row="1"/>
+                                <Label
+                                    Text="{Binding Date_Display}"
+                                    HorizontalOptions="End"
+                                    Grid.Column="1"
+                                    Grid.Row="1"/>
+                                <ImageButton
+                                    Source="icon_options"
+                                    BackgroundColor="Transparent"
+                                    HorizontalOptions="End"
+                                    WidthRequest="21"
+                                    Grid.Column="2"
+                                    Grid.Row="0"
+                                    Command="{Binding Source={x:Reference this}, Path=BindingContext.OpenMoreOptionsActionSheetCommand}"
+                                    CommandParameter="{Binding .}">
+                                </ImageButton>
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding Source={x:Reference this}, Path=BindingContext.OpenMovementDetailsPopupExpenseCommand}"
                                         CommandParameter="{Binding .}"/>
-                                </Image.GestureRecognizers>
-                            </Image>
-                            <Grid.GestureRecognizers>
-                                <TapGestureRecognizer
-                                    Command="{Binding Source={x:Reference this}, Path=BindingContext.ViewIncomeCommand}"
-                                    CommandParameter="{Binding .}"/>
-                            </Grid.GestureRecognizers>-->
-                        </Grid>
+                                </Grid.GestureRecognizers>
+                            </Grid>
+                            <StackLayout
+                                HeightRequest="1"
+                                BackgroundColor="#ECECEC"/>
+                        </StackLayout>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
-                <CollectionView.Footer>
-                    <StackLayout HeightRequest="10"/>
-                </CollectionView.Footer>
             </CollectionView>
-            <!--<ImageButton 
-                Source="icon_expenses_plus_round.png"
-                Scale="0.7"
-                BackgroundColor="Transparent"
-                AbsoluteLayout.LayoutFlags="PositionProportional"  
-                AbsoluteLayout.LayoutBounds=".95, .95, 80, 80"/>-->
+            <StackLayout
+                HeightRequest="1"
+                BackgroundColor="#ECECEC" />
+            <StackLayout 
+                x:Name="ValuesOverview"
+                Padding="10">
+                <Label
+                    Text="Total"
+                    HorizontalTextAlignment="Center"/>
+                <Label
+                    Text="{Binding TotalExpenses}"
+                    TextColor="{StaticResource TextDarkColor}"
+                    HorizontalTextAlignment="Center"
+                    FontSize="Medium"/>
+            </StackLayout>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

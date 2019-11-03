@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="Financial.Pages.SettingsPage"
+             Title="Configurações">
+    <ContentPage.Content>
+        <StackLayout Padding="20">
+            <StackLayout Orientation="Horizontal">
+                <Label
+                    Text="Controle de dízimos"
+                    FontSize="16"
+                    TextColor="{StaticResource TextDarkColor}"/>
+                <!--<Switch
+                    IsToggled="{Binding IsTithesControlEnabled}"
+                    Toggled="Switch_Toggled"
+                    VerticalOptions="StartAndExpand"
+                    HorizontalOptions="EndAndExpand"/>-->
+                <Switch
+                    x:Name="TithesControlSwitch"
+                    Toggled="TithesControlSwitch_Toggled"
+                    VerticalOptions="StartAndExpand"
+                    HorizontalOptions="EndAndExpand"/>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

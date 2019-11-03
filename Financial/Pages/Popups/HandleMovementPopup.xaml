@@ -7,6 +7,7 @@
     xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
     mc:Ignorable="d"
     x:Class="Financial.Pages.Popups.HandleMovementPopup"
+    xmlns:dotMorten="clr-namespace:dotMorten.Xamarin.Forms;assembly=dotMorten.Xamarin.Forms.AutoSuggestBox"
     CloseWhenBackgroundIsClicked="True">
     <AbsoluteLayout
         HorizontalOptions="FillAndExpand"
@@ -29,11 +30,19 @@
                     HorizontalOptions="Fill"
                     Placeholder="Valor"
                     Keyboard="Numeric"/>
-                <Entry
+                <!--<Entry
                     Text="{Binding Description}"
                     HorizontalOptions="Fill"
                     Placeholder="Descrição"
-                    Keyboard="Text"/>
+                    Keyboard="Text"/>-->
+                <dotMorten:AutoSuggestBox
+                    Text="{Binding Description}"
+                    TextColor="{StaticResource TextDarkColor}"
+                    HorizontalOptions="Fill"
+                    PlaceholderText="Descrição"
+                    PlaceholderTextColor="#9e9e9e"
+                    TextChanged="AutoSuggestBox_TextChanged"
+                    SuggestionChosen="AutoSuggestBox_SuggestionChosen"/>
                 <DatePicker 
                     Date="{Binding Date}"
                     MaximumDate="{Binding TodayDate}"
@@ -41,7 +50,10 @@
                 <StackLayout 
                     Orientation="Horizontal"
                     IsVisible="{Binding IsTitheableVisible}">
-                    <CheckBox IsChecked="{Binding IsTitheable}"/>
+                    <CheckBox 
+                        IsChecked="{Binding IsTitheable}"
+                        IsEnabled="{Binding IsTitheableEnabled}"
+                        Color="{Binding IsTitheableColor}"/>
                     <Label 
                         Text="Entregar dízimos desta entrada"
                         VerticalTextAlignment="Center"/>

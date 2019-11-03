@@ -23,8 +23,14 @@ namespace Financial
 
         public static bool UserGivesTithes
         {
-            get => CrossSettings.Current.GetValueOrDefault(nameof(UserGivesTithes), true);
+            get => CrossSettings.Current.GetValueOrDefault(nameof(UserGivesTithes), false);
             set => CrossSettings.Current.AddOrUpdateValue(nameof(UserGivesTithes), value);
+        }
+
+        private static bool FirstLaunch
+        {
+            get => CrossSettings.Current.GetValueOrDefault(nameof(FirstLaunch), true);
+            set => CrossSettings.Current.AddOrUpdateValue(nameof(FirstLaunch), value);
         }
 
         // type: 0 = short, 1 = long
@@ -53,6 +59,15 @@ namespace Financial
             InitializeComponent();
 
             MainPage = new AppShell();
+
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                if (FirstLaunch)
+                {
+                    FirstLaunch = false;
+                    UserGivesTithes = await Shell.Current.DisplayAlert("Antes de começarmos...", "Este app dá suporte à controle pessoal de entrega de dízimos. Você gostaria de habilitar esta funcionalidade?", "Sim", "Não");
+                }
+            });
         }
 
         protected override void OnStart()

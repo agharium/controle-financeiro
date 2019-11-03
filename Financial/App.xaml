@@ -7,9 +7,15 @@
              x:Class="Financial.App">
     <Application.Resources>
         <Color x:Key="PrimaryColor">#3273dc</Color>
-        <Color x:Key="TextDarkColor">#262626</Color>
+        <Color x:Key="TextDarkColor">#212121</Color>
 
         <Color x:Key="IncomesColor">#1fbb56</Color>
         <Color x:Key="ExpensesColor">#ed3b3b</Color>
+
+        <Style x:Key="DefaultButton" TargetType="Button">
+            <Setter Property="TextColor" Value="White"/>
+            <Setter Property="HorizontalOptions" Value="Fill"/>
+            <Setter Property="HeightRequest" Value="40"/>
+        </Style>
     </Application.Resources>
 </Application>
