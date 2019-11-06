@@ -69,8 +69,7 @@ namespace Financial.Models
 
         public Movement(int _type, double _value, string _description, DateTime _date, bool _isTitheable)
         {
-            Id = App.MOVEMENT_ID;
-            App.MOVEMENT_ID++;
+            Id = App.MOVEMENT_ID++;
             Type = _type;
             Value = _value;
             Description = _description;
