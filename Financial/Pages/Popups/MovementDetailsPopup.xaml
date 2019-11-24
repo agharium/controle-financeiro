@@ -20,43 +20,54 @@
             <StackLayout
                 Padding="15"
                 Spacing="0">
-                <Label 
-                    Text="Valor"/>
+                <Label Text="Valor"/>
                 <Label 
                     Text="{Binding Value}"
                     FontSize="Medium"
                     TextColor="{StaticResource TextDarkColor}"
                     Margin="0, 0, 0, 10"/>
-                <Label 
-                    Text="Descrição"/>
+                <Label Text="Descrição"/>
                 <Label 
                     Text="{Binding Description}"
                     FontSize="Medium"
                     TextColor="{StaticResource TextDarkColor}"
                     Margin="0, 0, 0, 10"/>
-                <Label 
-                    Text="Data"/>
+                <Label Text="Data"/>
                 <Label 
                     Text="{Binding Date}"
                     FontSize="Medium"
                     TextColor="{StaticResource TextDarkColor}"
                     Margin="0, 0, 0, 10"/>
                 <StackLayout IsVisible="{Binding TithesIsVisible}">
-                    <Label 
-                        Text="Dízimo"/>
+                    <Label Text="Dízimo"/>
                     <Label 
                         Text="{Binding Tithes}"
                         FontSize="Medium"
                         TextColor="{StaticResource TextDarkColor}"
                         Margin="0, 0, 0, 10"/>
-                    <Label 
-                        Text="Status"/>
+                    <Label Text="Status"/>
                     <Label 
                         Text="{Binding HandedStatus}"
                         FontSize="Medium"
                         TextColor="{StaticResource TextDarkColor}"
                         Margin="0, 0, 0, 10"/>
                 </StackLayout>
+                <!--<Button
+                    Text="Editar"
+                    TextColor="{StaticResource TextDarkColor}"
+                    BackgroundColor="#FFDD57"
+                    HorizontalOptions="Fill"
+                    HeightRequest="40"
+                    Margin="2.5"
+                    Command="{Binding OpenHandleMovementPopupEditCommand}"/>
+                <Button
+                    Text="Excluir"
+                    TextColor="White"
+                    BackgroundColor="#FF3860"
+                    HorizontalOptions="Fill"
+                    HeightRequest="40"
+                    Margin="2.5"
+                    Command="{Binding DeleteMovementCommand}"/>-->
             </StackLayout>
         </Frame>
         <ContentView

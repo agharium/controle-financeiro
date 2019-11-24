@@ -57,6 +57,9 @@
                     <Label 
                         Text="Entregar dízimos desta entrada"
                         VerticalTextAlignment="Center"/>
+                    <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ToggleIsTitheableCommand}"/>
+                    </StackLayout.GestureRecognizers>
                 </StackLayout>
                 <Button
                     Text="Salvar"

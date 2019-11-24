@@ -13,7 +13,7 @@
             Clicked="OnSearchTapped"/>
         <ToolbarItem
             Icon="icon_plus_white"
-            Command="{Binding OpenAddMovementPopupSaveExpenseCommand}"/>
+            Command="{Binding OpenHandleMovementPopupSaveExpenseCommand}"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout Spacing="0">
@@ -60,7 +60,7 @@
                     HorizontalOptions="Center"
                     VerticalOptions="Center"
                     BackgroundColor="Transparent"
-                    Command="{Binding OpenAddMovementPopupSaveExpenseCommand}"/>
+                    Command="{Binding OpenHandleMovementPopupSaveExpenseCommand}"/>
                 <Label 
                     Text="para adicionar uma despesa"
                     FontSize="Medium"
@@ -78,7 +78,7 @@
                             <Grid Padding="10, 10, 10, 0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>

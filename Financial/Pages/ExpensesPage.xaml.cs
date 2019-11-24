@@ -86,7 +86,7 @@ namespace Financial.Pages
 
         public string SearchParameter { get; set; }
 
-        public ICommand OpenAddMovementPopupSaveExpenseCommand { get; set; }
+        public ICommand OpenHandleMovementPopupSaveExpenseCommand { get; set; }
         public ICommand OpenMovementDetailsPopupExpenseCommand { get; set; }
         public ICommand OpenMoreOptionsActionSheetCommand { get; set; }
         public ICommand HandAllTithesCommand { get; set; }
@@ -151,7 +151,7 @@ namespace Financial.Pages
         /// MONTH/YEAR PICKER
         public ExpensesPageViewModel()
         {
-            OpenAddMovementPopupSaveExpenseCommand = new Command(OpenAddMovementPopupSaveExpense);
+            OpenHandleMovementPopupSaveExpenseCommand = new Command(OpenHandleMovementPopupSaveExpense);
             OpenMovementDetailsPopupExpenseCommand = new Command<Movement>(OpenMovementDetailsPopupExpense);
             OpenMoreOptionsActionSheetCommand = new Command<Movement>(OpenMoreOptionsActionSheet);
             
@@ -204,7 +204,7 @@ namespace Financial.Pages
             TipIsVisible = Expenses.Count() == 0 ? true : false;
         }
 
-        private void OpenAddMovementPopupSaveExpense()
+        private void OpenHandleMovementPopupSaveExpense()
         {
             var popupPage = new HandleMovementPopup(App.EXPENSE, App.OP_SAVE);
             popupPage.CallbackEvent += (object sender, object e) => UpdateCollection(true, true);

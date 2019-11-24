@@ -2,6 +2,8 @@
 using Rg.Plugins.Popup.Pages;
 using Rg.Plugins.Popup.Services;
 using System;
+/*using System.Windows.Input;
+using Xamarin.Forms;*/
 using Xamarin.Forms.Xaml;
 
 namespace Financial.Pages.Popups
@@ -29,6 +31,9 @@ namespace Financial.Pages.Popups
 
         public bool TithesIsVisible { get; set; }
 
+        /*private ICommand OpenHandleMovementPopupEditCommand { get; set; }
+        private ICommand DeleteMovementCommand { get; set; }*/
+
         public MovementDetailsPopupViewModel(Movement Movement)
         {
             Description = Movement.Description;
@@ -41,6 +46,20 @@ namespace Financial.Pages.Popups
                 Tithes = Movement.Tithes_Display.Remove(0, 6);
                 HandedStatus = Movement.Handed ? "Entregue" : "A entregar";
             }
+
+            /*OpenHandleMovementPopupEditCommand = new Command(OpenHandleMovementPopupEdit);
+            DeleteMovementCommand = new Command(DeleteMovement);*/
         }
+
+
+        /*private async void OpenHandleMovementPopupEdit()
+        {
+
+        }
+
+        private async void DeleteMovement()
+        {
+
+        }*/
     }
 }

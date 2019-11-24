@@ -13,7 +13,7 @@
             Clicked="OnSearchTapped"/>
         <ToolbarItem
             Icon="icon_plus_white"
-            Command="{Binding OpenAddMovementPopupSaveIncomeCommand}"/>
+            Command="{Binding OpenHandleMovementPopupSaveIncomeCommand}"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout Spacing="0">
@@ -60,7 +60,7 @@
                     HorizontalOptions="Center"
                     VerticalOptions="Center"
                     BackgroundColor="Transparent"
-                    Command="{Binding OpenAddMovementPopupSaveIncomeCommand}"/>
+                    Command="{Binding OpenHandleMovementPopupSaveIncomeCommand}"/>
                 <Label 
                     Text="para adicionar uma entrada"
                     FontSize="Medium"
@@ -78,7 +78,7 @@
                             <Grid Padding="10, 10, 10, 0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
@@ -161,7 +161,7 @@
                     </StackLayout>
                     <StackLayout Grid.Column="1">
                         <Label
-                            Text="Dízimos à entregar"
+                            Text="À entregar"
                             HorizontalTextAlignment="Center"/>
                         <Button 
                             Text="{Binding RemainingTithes}"

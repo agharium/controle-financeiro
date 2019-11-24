@@ -85,7 +85,7 @@ namespace Financial.Pages
 
         public string SearchParameter { get; set; }
 
-        public ICommand OpenAddMovementPopupSaveIncomeCommand { get; set; }
+        public ICommand OpenHandleMovementPopupSaveIncomeCommand { get; set; }
         public ICommand OpenMovementDetailsPopupIncomeCommand { get; set; }
         public ICommand OpenMoreOptionsActionSheetCommand { get; set; }
         public ICommand HandAllTithesCommand { get; set; }
@@ -217,7 +217,7 @@ namespace Financial.Pages
 
         public IncomesPageViewModel()
         {
-            OpenAddMovementPopupSaveIncomeCommand = new Command(OpenAddMovementPopupSaveIncome);
+            OpenHandleMovementPopupSaveIncomeCommand = new Command(OpenHandleMovementPopupSaveIncome);
             OpenMovementDetailsPopupIncomeCommand = new Command<Movement>(OpenMovementDetailsPopupIncome);
             OpenMoreOptionsActionSheetCommand = new Command<Movement>(OpenMoreOptionsActionSheet);
             HandAllTithesCommand = new Command(HandAllTithes);
@@ -283,7 +283,7 @@ namespace Financial.Pages
             TipIsVisible = Incomes.Count() == 0 ? true : false;
         }
 
-        private void OpenAddMovementPopupSaveIncome()
+        private void OpenHandleMovementPopupSaveIncome()
         {
             var popupPage = new HandleMovementPopup(App.INCOME, App.OP_SAVE);
             popupPage.CallbackEvent += (object sender, object e) => UpdateCollection(true, true);

@@ -60,13 +60,22 @@ namespace Financial.Pages.Popups
         public string Value { get; set; }
         public string Description { get; set; }
         public DateTime Date { get; set; }
-        public bool IsTitheable { get; set; }
+        private bool _isTitheable;
+        public bool IsTitheable {
+            get => _isTitheable;
+            set
+            {
+                _isTitheable = value;
+                Notify("IsTitheable");
+            }
+        }
 
         public string Title { get; set; }
         public DateTime TodayDate { get; set; }
         public bool IsTitheableVisible { get; set; }
         public bool IsTitheableEnabled { get; set; }
         public string IsTitheableColor { get; set; }
+        public ICommand ToggleIsTitheableCommand { get; set; }
 
         public ICommand SaveMovementCommand { get; set; }
 
@@ -80,6 +89,7 @@ namespace Financial.Pages.Popups
             Date = TodayDate = DateTime.Now;
             IsTitheableVisible = IsTitheableEnabled = App.UserGivesTithes && (Type == App.INCOME);
             IsTitheableColor = ((Color)Application.Current.Resources["PrimaryColor"]).ToHex();
+            ToggleIsTitheableCommand = new Command(ToggleIsTitheable);
 
             if (Type == App.INCOME && Operation == App.OP_SAVE)
             {
@@ -185,6 +195,12 @@ namespace Financial.Pages.Popups
             }
             else
                 return true;
+        }
+
+        private void ToggleIsTitheable()
+        {
+            if (IsTitheableEnabled)
+                IsTitheable = !IsTitheable;
         }
     }
 }
