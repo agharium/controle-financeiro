@@ -87,6 +87,7 @@ namespace Financial.Pages.Popups
             Movement = movement;
 
             Date = TodayDate = DateTime.Now;
+            Description = "";
             IsTitheableVisible = IsTitheableEnabled = App.UserGivesTithes && (Type == App.INCOME);
             IsTitheableColor = ((Color)Application.Current.Resources["PrimaryColor"]).ToHex();
             ToggleIsTitheableCommand = new Command(ToggleIsTitheable);
@@ -95,7 +96,6 @@ namespace Financial.Pages.Popups
             {
                 SaveMovementCommand = new Command(SaveIncome);
                 Title = "Nova entrada";
-                Description = "";
                 IsTitheable = IsTitheableVisible;
             } else if (Type == App.INCOME && Operation == App.OP_UPDATE)
             {
@@ -112,13 +112,13 @@ namespace Financial.Pages.Popups
             {
                 SaveMovementCommand = new Command(SaveExpense);
                 Title = "Nova despesa";
-                Description = "";
             } else if (Type == App.EXPENSE && Operation == App.OP_UPDATE)
             {
                 SaveMovementCommand = new Command(UpdateExpense);
                 Title = "Editar despesa";
                 Value = Convert.ToString(Movement.Value);
                 Description = Movement.Description;
+                Date = Movement.Date.DateTime;
             }
         }
 
