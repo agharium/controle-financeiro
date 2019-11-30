@@ -1,4 +1,5 @@
-﻿using Financial.Services;
+﻿using Financial.Pages;
+using Financial.Services;
 using Plugin.Settings;
 using Realms;
 using Xamarin.Forms;
@@ -11,6 +12,9 @@ namespace Financial
         public const int EXPENSE = 1;
         public const int OP_SAVE = 0;
         public const int OP_UPDATE = 1;
+
+        public static IncomesPageViewModel IncomesViewModel = null;
+        public static ExpensesPageViewModel ExpensesViewModel = null;
 
         public static ulong RealmSchemaVersion = 1;
         public static Realm Realm => Realm.GetInstance(new RealmConfiguration() { SchemaVersion = RealmSchemaVersion });

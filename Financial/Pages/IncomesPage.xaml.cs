@@ -13,14 +13,14 @@ using Xamarin.Forms.Xaml;
 namespace Financial.Pages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    [QueryProperty("Filter", "filter")]
+    [QueryProperty("DateFilter", "dateFilter")]
     public partial class IncomesPage : ContentPage
     {
-        private string _filter;
-        public string Filter
+        private string _dateFilter;
+        public string DateFilter
         {
-            get => _filter;
-            set => _filter = Uri.UnescapeDataString(value);
+            get => _dateFilter;
+            set => _dateFilter = Uri.UnescapeDataString(value);
         }
 
         IncomesPageViewModel ViewModel = new IncomesPageViewModel();
@@ -31,45 +31,17 @@ namespace Financial.Pages
             BindingContext = ViewModel;
         }
 
-        protected override bool OnBackButtonPressed()
-        {
-            if (SearchBar.IsVisible == true)
-            {
-                SearchBar.IsVisible = false;
-                MonthYearPicker.IsVisible = ValuesOverview.IsVisible = true;
-                SearchBar.Text = "";
-                Shell.SetNavBarIsVisible(this, true);
-                return true;
-            }
-            else
-            {
-                return base.OnBackButtonPressed();
-            }
-        }
-
-        private void OnSearchTapped(object sender, EventArgs e)
-        {
-            Shell.SetNavBarIsVisible(this, false);
-            SearchBar.IsVisible = true;
-            MonthYearPicker.IsVisible = ValuesOverview.IsVisible = false;
-            SearchBar.Focus();
-        }
-
-        private void OnSearchBarTextChanged(object sender, TextChangedEventArgs e) => ViewModel.Search();
-
-        private void OnSearchBarUnfocused(object sender, FocusEventArgs e) => OnBackButtonPressed();
-
         private void OnMonthYearPickerSelectedIndexChanged(object sender, EventArgs e) => ViewModel.UpdateCollection();
         protected override void OnAppearing()
         {
             base.OnAppearing();
 
-            if (!string.IsNullOrEmpty(Filter) && ViewModel.MonthYearPickerItemsSource.Contains(Filter))
-                ViewModel.MonthYearPickerSelectedItem = Filter;
+            if (!string.IsNullOrEmpty(DateFilter) && ViewModel.MonthYearPickerItemsSource.Contains(DateFilter))
+                ViewModel.MonthYearPickerSelectedItem = DateFilter;
         }
     }
 
-    class IncomesPageViewModel : ViewModelBase
+    public class IncomesPageViewModel : ViewModelBase
     {
         private ObservableCollection<Movement> IncomesBackup { get; set; }
         private ObservableCollection<Movement> _incomes;
@@ -82,8 +54,6 @@ namespace Financial.Pages
                 Notify("Incomes");
             }
         }
-
-        public string SearchParameter { get; set; }
 
         public ICommand OpenHandleMovementPopupSaveIncomeCommand { get; set; }
         public ICommand OpenMovementDetailsPopupIncomeCommand { get; set; }
@@ -217,6 +187,8 @@ namespace Financial.Pages
 
         public IncomesPageViewModel()
         {
+            App.IncomesViewModel = this;
+
             OpenHandleMovementPopupSaveIncomeCommand = new Command(OpenHandleMovementPopupSaveIncome);
             OpenMovementDetailsPopupIncomeCommand = new Command<Movement>(OpenMovementDetailsPopupIncome);
             OpenMoreOptionsActionSheetCommand = new Command<Movement>(OpenMoreOptionsActionSheet);
@@ -344,13 +316,13 @@ namespace Financial.Pages
             }
         }
 
-        public void Search()
+        public void Filter(string _filterParameter)
         {
-            if (string.IsNullOrEmpty(SearchParameter))
+            if (string.IsNullOrEmpty(_filterParameter))
                 Incomes = new ObservableCollection<Movement>(IncomesBackup);
             else
             {
-                var words = App.NormalizeCharacters(SearchParameter.ToLower()).Split(' ');
+                var words = App.NormalizeCharacters(_filterParameter.ToLower()).Split(' ');
                 Incomes = new ObservableCollection<Movement>(IncomesBackup.Where(i => words.All(w => App.NormalizeCharacters(i.Description.ToLower()).Contains(w))));
             }
         }

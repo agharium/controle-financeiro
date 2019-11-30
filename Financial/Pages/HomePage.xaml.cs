@@ -97,8 +97,8 @@ namespace Financial.Pages
 
         public HomePageViewModel()
         {
-            GoToIncomesPageCommand = new Command(async () => await Shell.Current.GoToAsync($"incomes?filter={MonthYearPickerSelectedItem}"));
-            GoToExpensesPageCommand = new Command(async () => await Shell.Current.GoToAsync($"expenses?filter={MonthYearPickerSelectedItem}"));
+            GoToIncomesPageCommand = new Command(async () => await Shell.Current.GoToAsync($"incomes?dateFilter={MonthYearPickerSelectedItem}"));
+            GoToExpensesPageCommand = new Command(async () => await Shell.Current.GoToAsync($"expenses?dateFilter={MonthYearPickerSelectedItem}"));
 
             PopulateMonthYearPicker();
             UpdateValues();

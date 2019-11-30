@@ -13,14 +13,14 @@ using Xamarin.Forms.Xaml;
 namespace Financial.Pages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    [QueryProperty("Filter", "filter")]
+    [QueryProperty("DateFilter", "dateFilter")]
     public partial class ExpensesPage : ContentPage
     {
-        private string _filter;
-        public string Filter
+        private string _dateFilter;
+        public string DateFilter
         {
-            get => _filter;
-            set => _filter = Uri.UnescapeDataString(value);
+            get => _dateFilter;
+            set => _dateFilter = Uri.UnescapeDataString(value);
         }
 
         ExpensesPageViewModel ViewModel = new ExpensesPageViewModel();
@@ -31,46 +31,18 @@ namespace Financial.Pages
             BindingContext = ViewModel;
         }
 
-        protected override bool OnBackButtonPressed()
-        {
-            if (SearchBar.IsVisible == true)
-            {
-                SearchBar.IsVisible = false;
-                MonthYearPicker.IsVisible = ValuesOverview.IsVisible = true;
-                SearchBar.Text = "";
-                Shell.SetNavBarIsVisible(this, true);
-                return true;
-            }
-            else
-            {
-                return base.OnBackButtonPressed();
-            }
-        }
-
-        private void OnSearchTapped(object sender, EventArgs e)
-        {
-            Shell.SetNavBarIsVisible(this, false);
-            SearchBar.IsVisible = true;
-            MonthYearPicker.IsVisible = ValuesOverview.IsVisible = false;
-            SearchBar.Focus();
-        }
-
-        private void OnSearchBarTextChanged(object sender, TextChangedEventArgs e) => ViewModel.Search();
-
-        private void OnSearchBarUnfocused(object sender, FocusEventArgs e) => OnBackButtonPressed();
-
         private void OnMonthYearPickerSelectedIndexChanged(object sender, EventArgs e) => ViewModel.UpdateCollection();
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
 
-            if (!string.IsNullOrEmpty(Filter) && ViewModel.MonthYearPickerItemsSource.Contains(Filter))
-                ViewModel.MonthYearPickerSelectedItem = Filter;
+            if (!string.IsNullOrEmpty(DateFilter) && ViewModel.MonthYearPickerItemsSource.Contains(DateFilter))
+                ViewModel.MonthYearPickerSelectedItem = DateFilter;
         }
     }
 
-    class ExpensesPageViewModel : ViewModelBase
+    public class ExpensesPageViewModel : ViewModelBase
     {
         private ObservableCollection<Movement> ExpensesBackup { get; set; }
         private ObservableCollection<Movement> _expenses;
@@ -83,8 +55,6 @@ namespace Financial.Pages
                 Notify("Expenses");
             }
         }
-
-        public string SearchParameter { get; set; }
 
         public ICommand OpenHandleMovementPopupSaveExpenseCommand { get; set; }
         public ICommand OpenMovementDetailsPopupExpenseCommand { get; set; }
@@ -151,6 +121,8 @@ namespace Financial.Pages
         /// MONTH/YEAR PICKER
         public ExpensesPageViewModel()
         {
+            App.ExpensesViewModel = this;
+
             OpenHandleMovementPopupSaveExpenseCommand = new Command(OpenHandleMovementPopupSaveExpense);
             OpenMovementDetailsPopupExpenseCommand = new Command<Movement>(OpenMovementDetailsPopupExpense);
             OpenMoreOptionsActionSheetCommand = new Command<Movement>(OpenMoreOptionsActionSheet);
@@ -242,13 +214,13 @@ namespace Financial.Pages
             }
         }
 
-        public void Search()
+        public void Filter(string _filterParameter)
         {
-            if (string.IsNullOrEmpty(SearchParameter))
+            if (string.IsNullOrEmpty(_filterParameter))
                 Expenses = new ObservableCollection<Movement>(ExpensesBackup);
             else
             {
-                var words = App.NormalizeCharacters(SearchParameter.ToLower()).Split(' ');
+                var words = App.NormalizeCharacters(_filterParameter.ToLower()).Split(' ');
                 Expenses = new ObservableCollection<Movement>(ExpensesBackup.Where(i => words.All(w => App.NormalizeCharacters(i.Description.ToLower()).Contains(w))));
             }
         }

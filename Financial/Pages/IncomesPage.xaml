@@ -3,31 +3,23 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:handlers="clr-namespace:Financial.Handlers"
              mc:Ignorable="d"
              x:Class="Financial.Pages.IncomesPage"
              x:Name="this"
              Title="Entradas">
+    <Shell.SearchHandler>
+        <handlers:IncomesSearchHandler 
+            Placeholder="Filtre pela descrição"
+            ShowsResults="false"/>
+    </Shell.SearchHandler>
     <ContentPage.ToolbarItems>
-        <ToolbarItem
-            Icon="icon_search_white"
-            Clicked="OnSearchTapped"/>
         <ToolbarItem
             Icon="icon_plus_white"
             Command="{Binding OpenHandleMovementPopupSaveIncomeCommand}"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout Spacing="0">
-            <SearchBar 
-                x:Name="SearchBar"
-                Text="{Binding SearchParameter}"
-                TextChanged="OnSearchBarTextChanged"
-                Unfocused="OnSearchBarUnfocused"
-                Placeholder="Pesquisa por descrição"
-                BackgroundColor="{StaticResource PrimaryColor}"
-                TextColor="White"
-                PlaceholderColor="#eee"
-                IsVisible="False"
-                HeightRequest="56"/>
             <Picker 
                 x:Name="MonthYearPicker"
                 Title="Mês/ano"
