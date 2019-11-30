@@ -14,16 +14,13 @@ namespace Financial.Pages.Popups
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class HandleMovementPopup : PopupPage
     {
-        public event EventHandler<object> CallbackEvent;
-        public void InvokeCallback() => CallbackEvent?.Invoke(this, EventArgs.Empty);
-
         HandleMovementPopupViewModel ViewModel;
 
         public HandleMovementPopup(int type, int operation, Movement movement = null)
         {
             InitializeComponent();
 
-            BindingContext = ViewModel = new HandleMovementPopupViewModel(this, type, operation, movement);
+            BindingContext = ViewModel = new HandleMovementPopupViewModel(type, operation, movement);
         }
 
         private void OnCloseButtonTapped(object sender, EventArgs e)
@@ -52,7 +49,6 @@ namespace Financial.Pages.Popups
 
     class HandleMovementPopupViewModel : ViewModelBase
     {
-        private HandleMovementPopup Parent { get; set; }
         public int Type { get; set; } // 0 = income, 1 = expense
         private int Operation { get; set; } // 0 = save, 1 = update
         private Movement Movement { get; set; }
@@ -79,14 +75,13 @@ namespace Financial.Pages.Popups
 
         public ICommand SaveMovementCommand { get; set; }
 
-        public HandleMovementPopupViewModel(HandleMovementPopup parent, int type, int operation, Movement movement)
+        public HandleMovementPopupViewModel(int type, int operation, Movement movement)
         {
-            Parent = parent;
             Type = type;
             Operation = operation;
             Movement = movement;
 
-            Date = TodayDate = DateTime.Now;
+            Date = TodayDate = DateTimeOffset.Now.LocalDateTime;
             Description = "";
             IsTitheableVisible = IsTitheableEnabled = App.UserGivesTithes && (Type == App.INCOME);
             IsTitheableColor = ((Color)Application.Current.Resources["PrimaryColor"]).ToHex();
@@ -128,7 +123,7 @@ namespace Financial.Pages.Popups
             {
                 var income = new Movement(App.INCOME, Convert.ToDouble(Value), Description, Date, IsTitheable);
                 App.Realm.Write(() => { App.Realm.Add(income); });
-                Parent.InvokeCallback();
+                App.IncomesViewModel.UpdateCollection(true, true);
                 await PopupNavigation.Instance.PopAsync();
                 App.Toast("Entrada adicionada com sucesso.");
             }
@@ -146,7 +141,7 @@ namespace Financial.Pages.Popups
                     Movement.IsTitheable = IsTitheable;
                     trans.Commit();
                 }
-                Parent.InvokeCallback();
+                App.IncomesViewModel.UpdateCollection(true, false, true);
                 await PopupNavigation.Instance.PopAsync();
                 App.Toast("Entrada atualizada com sucesso.");
             }
@@ -158,7 +153,7 @@ namespace Financial.Pages.Popups
             {
                 var expense = new Movement(App.EXPENSE, Convert.ToDouble(Value), Description, Date, false);
                 App.Realm.Write(() => { App.Realm.Add(expense); });
-                Parent.InvokeCallback();
+                App.ExpensesViewModel.UpdateCollection(true, true);
                 await PopupNavigation.Instance.PopAsync();
                 App.Toast("Despesa adicionada com sucesso.");
             }
@@ -175,7 +170,7 @@ namespace Financial.Pages.Popups
                     Movement.Date = Date;
                     trans.Commit();
                 }
-                Parent.InvokeCallback();
+                App.ExpensesViewModel.UpdateCollection(true, false, true);
                 await PopupNavigation.Instance.PopAsync();
                 App.Toast("Entrada atualizada com sucesso.");
             }

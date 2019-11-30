@@ -176,12 +176,7 @@ namespace Financial.Pages
             TipIsVisible = Expenses.Count() == 0 ? true : false;
         }
 
-        private void OpenHandleMovementPopupSaveExpense()
-        {
-            var popupPage = new HandleMovementPopup(App.EXPENSE, App.OP_SAVE);
-            popupPage.CallbackEvent += (object sender, object e) => UpdateCollection(true, true);
-            PopupNavigation.Instance.PushAsync(popupPage);
-        }
+        private void OpenHandleMovementPopupSaveExpense() => PopupNavigation.Instance.PushAsync(new HandleMovementPopup(App.EXPENSE, App.OP_SAVE));
 
         private async void OpenMovementDetailsPopupExpense(Movement Expense) => await PopupNavigation.Instance.PushAsync(new MovementDetailsPopup(Expense));
 
@@ -193,9 +188,7 @@ namespace Financial.Pages
             switch (actionSheet)
             {
                 case "Editar":
-                    var popupPage = new HandleMovementPopup(App.EXPENSE, App.OP_UPDATE, Expense);
-                    popupPage.CallbackEvent += (object sender, object e) => UpdateCollection(true, false, true);
-                    await PopupNavigation.Instance.PushAsync(popupPage);
+                    await PopupNavigation.Instance.PushAsync(new HandleMovementPopup(App.EXPENSE, App.OP_UPDATE, Expense));
                     break;
                 case "Excluir":
                     if (await Shell.Current.DisplayAlert("Confirmação", "Tem certeza que deseja excluir esta despesa?", "Sim", "Não"))

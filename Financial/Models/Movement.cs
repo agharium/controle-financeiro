@@ -9,8 +9,8 @@ namespace Financial.Models
     {
         [PrimaryKey]
         public int Id { get; set; }
-        /// 1 = Income
-        /// 0 = Expense
+        /// 0 = Income
+        /// 1 = Expense
         public int Type { get; set; }
         public double Value { get; set; }
         public string Description { get; set; }
@@ -23,11 +23,6 @@ namespace Financial.Models
         {
             get => Value.ToString("C", CultureInfo.CurrentCulture);
         }
-        /*[Ignored]
-        public string Description_ToString
-        {
-            get => string.IsNullOrEmpty(Description) ? "" : Description;
-        }*/
         [Ignored]
         public string Description_Display
         {

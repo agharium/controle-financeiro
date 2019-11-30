@@ -58,19 +58,21 @@
     </Shell.FlyoutHeaderTemplate>
 
     <FlyoutItem 
-        Icon="icon_home"
-        Title="Home">
+        Icon="icon_resume"
+        Title="Resumo">
         <ShellContent ContentTemplate="{DataTemplate pages:HomePage}"/>
     </FlyoutItem>
     
     <FlyoutItem FlyoutDisplayOptions="AsMultipleItems">
         <ShellContent
+            Route="incomes"
             Title="Entradas"
             Icon="icon_money"
             ContentTemplate="{DataTemplate pages:IncomesPage}"/>
         <ShellContent
+            Route="expenses"
             Title="Despesas"
-            Icon="icon_hand_money"
+            Icon="icon_money_off"
             ContentTemplate="{DataTemplate pages:ExpensesPage}"/>
     </FlyoutItem>
 

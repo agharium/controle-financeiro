@@ -13,6 +13,7 @@ namespace Financial
         public const int OP_SAVE = 0;
         public const int OP_UPDATE = 1;
 
+        public static string HomePageSelectedDateFilter = null;
         public static IncomesPageViewModel IncomesViewModel = null;
         public static ExpensesPageViewModel ExpensesViewModel = null;
 

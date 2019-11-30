@@ -89,7 +89,7 @@ namespace Financial.Pages
             get => _monthYearPickerSelectedItem;
             set
             {
-                _monthYearPickerSelectedItem = value;
+                _monthYearPickerSelectedItem = App.HomePageSelectedDateFilter = value;
                 Notify("MonthYearPickerSelectedItem");
             }
         }
@@ -97,8 +97,8 @@ namespace Financial.Pages
 
         public HomePageViewModel()
         {
-            GoToIncomesPageCommand = new Command(async () => await Shell.Current.GoToAsync($"incomes?dateFilter={MonthYearPickerSelectedItem}"));
-            GoToExpensesPageCommand = new Command(async () => await Shell.Current.GoToAsync($"expenses?dateFilter={MonthYearPickerSelectedItem}"));
+            GoToIncomesPageCommand = new Command(async () => await Shell.Current.GoToAsync($"//incomes"));
+            GoToExpensesPageCommand = new Command(async () => await Shell.Current.GoToAsync($"//expenses"));
 
             PopulateMonthYearPicker();
             UpdateValues();

@@ -13,15 +13,15 @@ using Xamarin.Forms.Xaml;
 namespace Financial.Pages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    [QueryProperty("DateFilter", "dateFilter")]
+    //[QueryProperty("DateFilter", "dateFilter")]
     public partial class IncomesPage : ContentPage
     {
-        private string _dateFilter;
+        /*private string _dateFilter;
         public string DateFilter
         {
             get => _dateFilter;
             set => _dateFilter = Uri.UnescapeDataString(value);
-        }
+        }*/
 
         IncomesPageViewModel ViewModel = new IncomesPageViewModel();
         public IncomesPage()
@@ -35,9 +35,11 @@ namespace Financial.Pages
         protected override void OnAppearing()
         {
             base.OnAppearing();
-
-            if (!string.IsNullOrEmpty(DateFilter) && ViewModel.MonthYearPickerItemsSource.Contains(DateFilter))
-                ViewModel.MonthYearPickerSelectedItem = DateFilter;
+            if (!string.IsNullOrEmpty(App.HomePageSelectedDateFilter) && ViewModel.MonthYearPickerItemsSource.Contains(App.HomePageSelectedDateFilter))
+            {
+                ViewModel.MonthYearPickerSelectedItem = App.HomePageSelectedDateFilter;
+                App.HomePageSelectedDateFilter = null;
+            }
         }
     }
 
@@ -255,12 +257,7 @@ namespace Financial.Pages
             TipIsVisible = Incomes.Count() == 0 ? true : false;
         }
 
-        private void OpenHandleMovementPopupSaveIncome()
-        {
-            var popupPage = new HandleMovementPopup(App.INCOME, App.OP_SAVE);
-            popupPage.CallbackEvent += (object sender, object e) => UpdateCollection(true, true);
-            PopupNavigation.Instance.PushAsync(popupPage);
-        }
+        private void OpenHandleMovementPopupSaveIncome() => PopupNavigation.Instance.PushAsync(new HandleMovementPopup(App.INCOME, App.OP_SAVE));
 
         private async void OpenMovementDetailsPopupIncome(Movement Income) => await PopupNavigation.Instance.PushAsync(new MovementDetailsPopup(Income));
 
@@ -294,12 +291,10 @@ namespace Financial.Pages
                     }
                     break;
                 case "Editar":
-                    var popupPage = new HandleMovementPopup(App.INCOME, App.OP_UPDATE, Income);
-                    popupPage.CallbackEvent += (object sender, object e) => UpdateCollection(true, false, true);
-                    await PopupNavigation.Instance.PushAsync(popupPage);
+                    await PopupNavigation.Instance.PushAsync(new HandleMovementPopup(App.INCOME, App.OP_UPDATE, Income));
                     break;
                 case "Excluir":
-                    var extra = Income.Handed ? " Esta entrada também representa um dízimo já entregue e há uma despesa registrada referente à sua entrega." : "";
+                    var extra = Income.Handed ? " Esta entrada também representa um dízimo já entregue e uma despesa foi registrada referente à sua entrega." : "";
                     if (await Shell.Current.DisplayAlert("Confirmação", "Tem certeza que deseja excluir esta entrada?" + extra, "Sim", "Não"))
                     {
                         using (var trans = App.Realm.BeginWrite())

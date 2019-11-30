@@ -52,13 +52,13 @@
                         TextColor="{StaticResource TextDarkColor}"
                         Margin="0, 0, 0, 10"/>
                 </StackLayout>
-                <!--<Button
+                <Button
                     Text="Editar"
                     TextColor="{StaticResource TextDarkColor}"
                     BackgroundColor="#FFDD57"
                     HorizontalOptions="Fill"
                     HeightRequest="40"
-                    Margin="2.5"
+                    Margin="0, 5"
                     Command="{Binding OpenHandleMovementPopupEditCommand}"/>
                 <Button
                     Text="Excluir"
@@ -66,8 +66,8 @@
                     BackgroundColor="#FF3860"
                     HorizontalOptions="Fill"
                     HeightRequest="40"
-                    Margin="2.5"
-                    Command="{Binding DeleteMovementCommand}"/>-->
+                    Margin="0, 5"
+                    Command="{Binding DeleteMovementCommand}"/>
             </StackLayout>
         </Frame>
         <ContentView

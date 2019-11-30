@@ -2,8 +2,9 @@
 using Rg.Plugins.Popup.Pages;
 using Rg.Plugins.Popup.Services;
 using System;
-/*using System.Windows.Input;
-using Xamarin.Forms;*/
+using System.Globalization;
+using System.Windows.Input;
+using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace Financial.Pages.Popups
@@ -23,6 +24,8 @@ namespace Financial.Pages.Popups
 
     class MovementDetailsPopupViewModel : ViewModelBase
     {
+        private Movement Movement;
+
         public string Description { get; set; }
         public string Date { get; set; }
         public string Value { get; set; }
@@ -31,11 +34,13 @@ namespace Financial.Pages.Popups
 
         public bool TithesIsVisible { get; set; }
 
-        /*private ICommand OpenHandleMovementPopupEditCommand { get; set; }
-        private ICommand DeleteMovementCommand { get; set; }*/
+        public ICommand OpenHandleMovementPopupEditCommand { get; set; }
+        public ICommand DeleteMovementCommand { get; set; }
 
-        public MovementDetailsPopupViewModel(Movement Movement)
+        public MovementDetailsPopupViewModel(Movement _movement)
         {
+            Movement = _movement;
+
             Description = Movement.Description;
             Value = Movement.Value_Display;
             Date = Movement.Date_Display;
@@ -47,19 +52,39 @@ namespace Financial.Pages.Popups
                 HandedStatus = Movement.Handed ? "Entregue" : "A entregar";
             }
 
-            /*OpenHandleMovementPopupEditCommand = new Command(OpenHandleMovementPopupEdit);
-            DeleteMovementCommand = new Command(DeleteMovement);*/
+            OpenHandleMovementPopupEditCommand = new Command(OpenHandleMovementPopupEdit);
+            DeleteMovementCommand = new Command(DeleteMovement);
         }
 
 
-        /*private async void OpenHandleMovementPopupEdit()
+        private async void OpenHandleMovementPopupEdit()
         {
-
+            await PopupNavigation.Instance.PopAsync();
+            await PopupNavigation.Instance.PushAsync(new HandleMovementPopup(Movement.Type, App.OP_UPDATE, Movement));
         }
 
         private async void DeleteMovement()
         {
+            var strType = Movement.Type == App.INCOME ? "entrada" : "despesa";
+            var strExtra = Movement.Type == App.INCOME && Movement.Handed ? " Esta entrada também representa um dízimo já entregue e uma despesa foi registrada referente à sua entrega." : "";
+            if (await Shell.Current.DisplayAlert("Confirmação", $"Tem certeza que deseja excluir esta {strType}?{strExtra}", "Sim", "Não"))
+            {
+                using (var trans = App.Realm.BeginWrite())
+                {
+                    var MovementType = Movement.Type;
 
-        }*/
+                    App.Realm.Remove(Movement);
+                    trans.Commit();
+
+                    if (MovementType == App.INCOME)
+                        App.IncomesViewModel.UpdateCollection(true, false, true);
+                    else
+                        App.ExpensesViewModel.UpdateCollection(true, false, true);
+                    
+                    await PopupNavigation.Instance.PopAsync();
+                    App.Toast(CultureInfo.CurrentCulture.TextInfo.ToTitleCase(strType) + " excluída com sucesso.");
+                }
+            }
+        }
     }
 }
