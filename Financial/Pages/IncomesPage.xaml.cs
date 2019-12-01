@@ -13,16 +13,8 @@ using Xamarin.Forms.Xaml;
 namespace Financial.Pages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    //[QueryProperty("DateFilter", "dateFilter")]
     public partial class IncomesPage : ContentPage
     {
-        /*private string _dateFilter;
-        public string DateFilter
-        {
-            get => _dateFilter;
-            set => _dateFilter = Uri.UnescapeDataString(value);
-        }*/
-
         IncomesPageViewModel ViewModel = new IncomesPageViewModel();
         public IncomesPage()
         {
@@ -245,7 +237,7 @@ namespace Financial.Pages
 
             var revenues = Incomes.Sum(i => i.Value);
             var remainingTithes = Incomes.Where(i => i.IsTitheable == true).Where(i => i.Handed == false).Sum(i => i.Value) * 0.1;
-            var totalTithes = revenues * 0.1;
+            var totalTithes = Incomes.Where(i => i.IsTitheable == true).Sum(i => i.Value) * 0.1;
 
             Revenues = revenues.ToString("C", CultureInfo.CurrentCulture);
             RemainingTithes = remainingTithes.ToString("C", CultureInfo.CurrentCulture);

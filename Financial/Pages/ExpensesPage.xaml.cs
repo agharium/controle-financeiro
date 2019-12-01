@@ -13,16 +13,8 @@ using Xamarin.Forms.Xaml;
 namespace Financial.Pages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    [QueryProperty("DateFilter", "dateFilter")]
     public partial class ExpensesPage : ContentPage
     {
-        private string _dateFilter;
-        public string DateFilter
-        {
-            get => _dateFilter;
-            set => _dateFilter = Uri.UnescapeDataString(value);
-        }
-
         ExpensesPageViewModel ViewModel = new ExpensesPageViewModel();
         public ExpensesPage()
         {
@@ -37,8 +29,8 @@ namespace Financial.Pages
         {
             base.OnAppearing();
 
-            if (!string.IsNullOrEmpty(DateFilter) && ViewModel.MonthYearPickerItemsSource.Contains(DateFilter))
-                ViewModel.MonthYearPickerSelectedItem = DateFilter;
+            if (!string.IsNullOrEmpty(App.HomePageSelectedDateFilter) && ViewModel.MonthYearPickerItemsSource.Contains(App.HomePageSelectedDateFilter))
+                ViewModel.MonthYearPickerSelectedItem = App.HomePageSelectedDateFilter;
         }
     }
 
