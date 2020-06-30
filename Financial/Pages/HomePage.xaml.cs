@@ -107,7 +107,9 @@ namespace Financial.Pages
         public void PopulateMonthYearPicker()
         {
             var movements = App.Realm.All<Movement>().OrderByDescending(i => i.Date).ToList();
-            MonthYearPickerItemsSource = movements.Select(m => m.Date_Display_Filter).Distinct().ToList();
+            var list = movements.Select(m => m.Date_Display_Filter).Distinct().ToList();
+            list.Add("Todo o período");
+            MonthYearPickerItemsSource = list;
 
             if (MonthYearPickerItemsSource.Count() > 0)
                 MonthYearPickerSelectedItem = MonthYearPickerItemsSource[0];
@@ -119,19 +121,28 @@ namespace Financial.Pages
         {
             try
             {
-                if (MonthYearPickerSelectedItem != null)
+                double totalIncome, totalExpense;
+
+                if (MonthYearPickerSelectedItem == "Todo o período")
+                {
+                    var movements = App.Realm.All<Movement>().ToList();
+
+                    totalIncome = movements.Where(m => m.Type == App.INCOME).Sum(m => m.Value);
+                    totalExpense = movements.Where(m => m.Type == App.EXPENSE).Sum(m => m.Value);
+                }
+                else
                 {
                     var movements = App.Realm.All<Movement>().OrderByDescending(i => i.Date).ToList();
 
-                    var totalIncome = movements.Where(m => m.Type == App.INCOME).Where(m => m.Date_Display_Filter == MonthYearPickerSelectedItem).Sum(m => m.Value);
-                    var totalExpense = movements.Where(m => m.Type == App.EXPENSE).Where(m => m.Date_Display_Filter == MonthYearPickerSelectedItem).Sum(m => m.Value);
-                    var balance = totalIncome - totalExpense;
-                    TotalIncome = totalIncome.ToString("C", CultureInfo.CurrentCulture);
-                    TotalExpense = totalExpense.ToString("C", CultureInfo.CurrentCulture);
-                    Balance = balance.ToString("C", CultureInfo.CurrentCulture);
+                    totalIncome = movements.Where(m => m.Type == App.INCOME).Where(m => m.Date_Display_Filter == MonthYearPickerSelectedItem).Sum(m => m.Value);
+                    totalExpense = movements.Where(m => m.Type == App.EXPENSE).Where(m => m.Date_Display_Filter == MonthYearPickerSelectedItem).Sum(m => m.Value);
                 }
-                else
-                    TotalIncome = TotalExpense = Balance = 0.ToString("C", CultureInfo.CurrentCulture);
+
+                var balance = totalIncome - totalExpense;
+
+                TotalIncome = totalIncome.ToString("C", CultureInfo.CurrentCulture);
+                TotalExpense = totalExpense.ToString("C", CultureInfo.CurrentCulture);
+                Balance = balance.ToString("C", CultureInfo.CurrentCulture);
             } catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex);
