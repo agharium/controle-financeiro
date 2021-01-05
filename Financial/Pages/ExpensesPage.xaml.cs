@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -31,6 +32,12 @@ namespace Financial.Pages
 
             if (!string.IsNullOrEmpty(App.HomePageSelectedDateFilter) && ViewModel.MonthYearPickerItemsSource.Contains(App.HomePageSelectedDateFilter))
                 ViewModel.MonthYearPickerSelectedItem = App.HomePageSelectedDateFilter;
+        }
+
+        protected override bool OnBackButtonPressed()
+        {
+            Shell.Current.GoToAsync($"//home");
+            return true;
         }
     }
 
@@ -106,7 +113,7 @@ namespace Financial.Pages
             get => _monthYearPickerSelectedItem;
             set
             {
-                _monthYearPickerSelectedItem = value;
+                _monthYearPickerSelectedItem = App.HomePageSelectedDateFilter = value;
                 Notify("MonthYearPickerSelectedItem");
             }
         }
@@ -121,7 +128,12 @@ namespace Financial.Pages
             
             Expenses = new ObservableCollection<Movement>();
 
-            UpdateCollection(true);
+            var expenses = App.Realm.All<Movement>().Where(i => i.Type == App.EXPENSE).OrderByDescending(i => i.Date).ToList();
+            MonthYearPickerItemsSource = expenses.Select(i => i.Date_Display_Filter).Distinct().ToList();
+            if (!string.IsNullOrEmpty(App.HomePageSelectedDateFilter) && MonthYearPickerItemsSource.Contains(App.HomePageSelectedDateFilter))
+                MonthYearPickerSelectedItem = App.HomePageSelectedDateFilter;
+
+            UpdateCollection();
         }
 
         private void PopulateMonthYearPicker(bool selectLastItemFilter = false, bool tryToStayWhereItIs = false)

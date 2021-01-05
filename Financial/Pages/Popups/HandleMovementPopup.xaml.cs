@@ -67,7 +67,7 @@ namespace Financial.Pages.Popups
         }
 
         public string Title { get; set; }
-        public DateTime TodayDate { get; set; }
+        public DateTime MaxDate { get; set; }
         public bool IsTitheableVisible { get; set; }
         public bool IsTitheableEnabled { get; set; }
         public string IsTitheableColor { get; set; }
@@ -81,7 +81,8 @@ namespace Financial.Pages.Popups
             Operation = operation;
             Movement = movement;
 
-            Date = TodayDate = DateTimeOffset.Now.LocalDateTime;
+            Date = DateTimeOffset.Now.LocalDateTime;
+            MaxDate = Date.AddMonths(1);
             Description = "";
             IsTitheableVisible = IsTitheableEnabled = App.UserGivesTithes && (Type == App.INCOME);
             IsTitheableColor = ((Color)Application.Current.Resources["PrimaryColor"]).ToHex();
@@ -125,7 +126,7 @@ namespace Financial.Pages.Popups
                 App.Realm.Write(() => { App.Realm.Add(income); });
                 App.IncomesViewModel.UpdateCollection(true, true);
                 await PopupNavigation.Instance.PopAsync();
-                App.Toast("Entrada adicionada com sucesso.");
+                App.Toast("Entrada registrada com sucesso.");
             }
         }
 
@@ -133,14 +134,17 @@ namespace Financial.Pages.Popups
         {
             if (await FieldsVerification())
             {
+                Date = DateTime.SpecifyKind(Date, DateTimeKind.Unspecified);
+
                 using (var trans = App.Realm.BeginWrite())
                 {
                     Movement.Value = Convert.ToDouble(Value);
                     Movement.Description = Description;
-                    Movement.Date = Date;
+                    Movement.Date = new DateTimeOffset(Date, TimeSpan.Zero);
                     Movement.IsTitheable = IsTitheable;
                     trans.Commit();
                 }
+
                 App.IncomesViewModel.UpdateCollection(true, false, true);
                 await PopupNavigation.Instance.PopAsync();
                 App.Toast("Entrada atualizada com sucesso.");
@@ -155,7 +159,7 @@ namespace Financial.Pages.Popups
                 App.Realm.Write(() => { App.Realm.Add(expense); });
                 App.ExpensesViewModel.UpdateCollection(true, true);
                 await PopupNavigation.Instance.PopAsync();
-                App.Toast("Despesa adicionada com sucesso.");
+                App.Toast("Despesa registrada com sucesso.");
             }
         }
 
@@ -163,16 +167,19 @@ namespace Financial.Pages.Popups
         {
             if (await FieldsVerification())
             {
+                Date = DateTime.SpecifyKind(Date, DateTimeKind.Unspecified);
+
                 using (var trans = App.Realm.BeginWrite())
                 {
                     Movement.Value = Convert.ToDouble(Value);
                     Movement.Description = Description;
-                    Movement.Date = Date;
+                    Movement.Date = new DateTimeOffset(Date, TimeSpan.Zero);
                     trans.Commit();
                 }
+
                 App.ExpensesViewModel.UpdateCollection(true, false, true);
                 await PopupNavigation.Instance.PopAsync();
-                App.Toast("Entrada atualizada com sucesso.");
+                App.Toast("Despesa atualizada com sucesso.");
             }
         }
 

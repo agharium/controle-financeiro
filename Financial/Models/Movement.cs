@@ -60,16 +60,18 @@ namespace Financial.Models
             get => Handed ? TextDecorations.Strikethrough : TextDecorations.None;
         }
 
-        public Movement() { }
+        public Movement() {}
 
         public Movement(int _type, double _value, string _description, DateTime _date, bool _isTitheable)
         {
+            _date = DateTime.SpecifyKind(_date, DateTimeKind.Unspecified);
+
             Id = App.MOVEMENT_ID++;
             Type = _type;
             Value = _value;
             Description = _description;
             IsTitheable = _isTitheable;
-            Date = _date;
+            Date = new DateTimeOffset(_date, TimeSpan.Zero);
             Handed = false;
         }
     }

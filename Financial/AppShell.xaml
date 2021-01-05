@@ -60,7 +60,9 @@
     <FlyoutItem 
         Icon="icon_resume"
         Title="Resumo">
-        <ShellContent ContentTemplate="{DataTemplate pages:HomePage}"/>
+        <ShellContent 
+            Route="home"
+            ContentTemplate="{DataTemplate pages:HomePage}"/>
     </FlyoutItem>
     
     <FlyoutItem FlyoutDisplayOptions="AsMultipleItems">

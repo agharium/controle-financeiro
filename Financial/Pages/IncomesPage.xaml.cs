@@ -28,10 +28,13 @@ namespace Financial.Pages
         {
             base.OnAppearing();
             if (!string.IsNullOrEmpty(App.HomePageSelectedDateFilter) && ViewModel.MonthYearPickerItemsSource.Contains(App.HomePageSelectedDateFilter))
-            {
                 ViewModel.MonthYearPickerSelectedItem = App.HomePageSelectedDateFilter;
-                App.HomePageSelectedDateFilter = null;
-            }
+        }
+
+        protected override bool OnBackButtonPressed()
+        {
+            Shell.Current.GoToAsync($"//home");
+            return true;
         }
     }
 
@@ -173,7 +176,7 @@ namespace Financial.Pages
             get => _monthYearPickerSelectedItem;
             set
             {
-                _monthYearPickerSelectedItem = value;
+                _monthYearPickerSelectedItem = App.HomePageSelectedDateFilter = value;
                 Notify("MonthYearPickerSelectedItem");
             }
         }
@@ -193,7 +196,12 @@ namespace Financial.Pages
 
             Incomes = new ObservableCollection<Movement>();
 
-            UpdateCollection(true);
+            var incomes = App.Realm.All<Movement>().Where(i => i.Type == App.INCOME).OrderByDescending(i => i.Date).ToList();
+            MonthYearPickerItemsSource = incomes.Select(i => i.Date_Display_Filter).Distinct().ToList();
+            if (!string.IsNullOrEmpty(App.HomePageSelectedDateFilter) && MonthYearPickerItemsSource.Contains(App.HomePageSelectedDateFilter))
+                MonthYearPickerSelectedItem = App.HomePageSelectedDateFilter;
+
+            UpdateCollection();
         }
 
         private void PopulateMonthYearPicker(bool selectLastItemFilter = false, bool tryToStayWhereItIs = false)
@@ -224,7 +232,6 @@ namespace Financial.Pages
         {
             if (populatePicker)
                 PopulateMonthYearPicker(selectLastItemFilter, tryToStayWhereItIs);
-
 
             if (!string.IsNullOrWhiteSpace(MonthYearPickerSelectedItem))
             {

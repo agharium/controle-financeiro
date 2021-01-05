@@ -9,7 +9,7 @@
     x:Class="Financial.Pages.Popups.HandleMovementPopup"
     xmlns:dotMorten="clr-namespace:dotMorten.Xamarin.Forms;assembly=dotMorten.Xamarin.Forms.AutoSuggestBox"
     CloseWhenBackgroundIsClicked="True">
-    <ScrollView>
+    <!--<ScrollView>-->
         <AbsoluteLayout
             HorizontalOptions="FillAndExpand"
             VerticalOptions="CenterAndExpand">
@@ -20,7 +20,7 @@
                 HasShadow="False"
                 AbsoluteLayout.LayoutFlags="All"
                 AbsoluteLayout.LayoutBounds="1, 1, 1, 1">
-                <ScrollView>
+                <!--<ScrollView>-->
                     <StackLayout Padding="15">
                         <Label
                             Text="{Binding Title}"
@@ -47,7 +47,7 @@
                             SuggestionChosen="AutoSuggestBox_SuggestionChosen"/>
                         <DatePicker 
                             Date="{Binding Date}"
-                            MaximumDate="{Binding TodayDate}"
+                            MaximumDate="{Binding MaxDate}"
                             HorizontalOptions="Fill"/>
                         <StackLayout 
                             Orientation="Horizontal"
@@ -72,7 +72,7 @@
                             Margin="2.5"
                             Command="{Binding SaveMovementCommand}"/>
                     </StackLayout>
-                </ScrollView>
+                <!--</ScrollView>-->
             </Frame>
             <ContentView
                 Margin="0, 5, 5, 0"
@@ -87,5 +87,5 @@
                     Source="icon_x_round_red"/>
             </ContentView>
         </AbsoluteLayout>
-    </ScrollView>
+    <!--</ScrollView>-->
 </pages:PopupPage>

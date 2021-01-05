@@ -18,7 +18,7 @@ namespace Financial.Droid
             base.OnCreate(savedInstanceState);
 
             /// PLUGINS
-            Rg.Plugins.Popup.Popup.Init(this, savedInstanceState);
+            Rg.Plugins.Popup.Popup.Init(this);
             /// PLUGINS
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);

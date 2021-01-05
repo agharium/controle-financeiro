@@ -31,6 +31,25 @@ namespace Financial.Pages
             ViewModel.UpdateValues();
             if (backup != null && ViewModel.MonthYearPickerItemsSource.Contains(backup))
                 ViewModel.MonthYearPickerSelectedItem = backup;
+
+            if (!string.IsNullOrEmpty(App.HomePageSelectedDateFilter) && ViewModel.MonthYearPickerItemsSource.Contains(App.HomePageSelectedDateFilter))
+                ViewModel.MonthYearPickerSelectedItem = App.HomePageSelectedDateFilter;
+        }
+
+        public void OnForwardSwipe(object sender, SwipedEventArgs e)
+        {
+            if (MonthYearPicker.SelectedIndex < MonthYearPicker.Items.Count - 1)
+                MonthYearPicker.SelectedIndex++;
+            else
+                MonthYearPicker.SelectedIndex = 0;
+        }
+
+        public void OnBackwardSwipe(object sender, SwipedEventArgs e)
+        {
+            if (MonthYearPicker.SelectedIndex > 0)
+                MonthYearPicker.SelectedIndex--;
+            else
+                MonthYearPicker.SelectedIndex = MonthYearPicker.Items.Count - 1;
         }
     }
 
@@ -72,6 +91,28 @@ namespace Financial.Pages
             }
         }
 
+        private string _titheable;
+        public string Titheable
+        {
+            get => _titheable;
+            set
+            {
+                _titheable = value;
+                Notify("Titheable");
+            }
+        }
+
+        private string _titheableIsVisible;
+        public string TitheableIsVisible
+        {
+            get => _titheableIsVisible;
+            set
+            {
+                _titheableIsVisible = value;
+                Notify("TitheableIsVisible");
+            }
+        }
+
         /// MONTH/YEAR PICKER
         private List<string> _monthYearPickerItemsSource;
         public List<string> MonthYearPickerItemsSource
@@ -100,7 +141,13 @@ namespace Financial.Pages
             GoToIncomesPageCommand = new Command(async () => await Shell.Current.GoToAsync($"//incomes"));
             GoToExpensesPageCommand = new Command(async () => await Shell.Current.GoToAsync($"//expenses"));
 
+            TitheableIsVisible = App.UserGivesTithes.ToString();
+
             PopulateMonthYearPicker();
+
+            if (!string.IsNullOrEmpty(App.HomePageSelectedDateFilter) && MonthYearPickerItemsSource.Contains(App.HomePageSelectedDateFilter))
+                MonthYearPickerSelectedItem = App.HomePageSelectedDateFilter;
+
             UpdateValues();
         }
 
@@ -121,7 +168,7 @@ namespace Financial.Pages
         {
             try
             {
-                double totalIncome, totalExpense;
+                double totalIncome, totalExpense, totalTitheable;
 
                 if (MonthYearPickerSelectedItem == "Todo o período")
                 {
@@ -129,6 +176,7 @@ namespace Financial.Pages
 
                     totalIncome = movements.Where(m => m.Type == App.INCOME).Sum(m => m.Value);
                     totalExpense = movements.Where(m => m.Type == App.EXPENSE).Sum(m => m.Value);
+                    totalTitheable = movements.Where(m => m.Type == App.INCOME).Where(m => m.IsTitheable == true).Sum(m => m.Value);
                 }
                 else
                 {
@@ -136,6 +184,7 @@ namespace Financial.Pages
 
                     totalIncome = movements.Where(m => m.Type == App.INCOME).Where(m => m.Date_Display_Filter == MonthYearPickerSelectedItem).Sum(m => m.Value);
                     totalExpense = movements.Where(m => m.Type == App.EXPENSE).Where(m => m.Date_Display_Filter == MonthYearPickerSelectedItem).Sum(m => m.Value);
+                    totalTitheable = movements.Where(m => m.Type == App.INCOME).Where(m => m.Date_Display_Filter == MonthYearPickerSelectedItem).Where(m => m.IsTitheable == true).Sum(m => m.Value);
                 }
 
                 var balance = totalIncome - totalExpense;
@@ -143,6 +192,7 @@ namespace Financial.Pages
                 TotalIncome = totalIncome.ToString("C", CultureInfo.CurrentCulture);
                 TotalExpense = totalExpense.ToString("C", CultureInfo.CurrentCulture);
                 Balance = balance.ToString("C", CultureInfo.CurrentCulture);
+                Titheable = totalTitheable.ToString("C", CultureInfo.CurrentCulture);
             } catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex);

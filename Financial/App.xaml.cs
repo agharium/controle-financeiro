@@ -2,6 +2,7 @@
 using Financial.Services;
 using Plugin.Settings;
 using Realms;
+using System;
 using Xamarin.Forms;
 
 namespace Financial
@@ -70,7 +71,7 @@ namespace Financial
                 if (FirstLaunch)
                 {
                     FirstLaunch = false;
-                    UserGivesTithes = await Shell.Current.DisplayAlert("Antes de começarmos...", "Este app dá suporte à controle pessoal de entrega de dízimos. Você gostaria de habilitar esta funcionalidade?", "Sim", "Não");
+                    UserGivesTithes = await Shell.Current.DisplayAlert("Antes de começarmos...", "Este app dá suporte a controle pessoal de entrega de dízimos. Você gostaria de habilitar esta funcionalidade?", "Sim", "Não");
                 }
             });
         }

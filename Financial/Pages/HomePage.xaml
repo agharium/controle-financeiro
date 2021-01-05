@@ -18,11 +18,10 @@
                 HorizontalOptions="FillAndExpand"
                 VerticalOptions="Center"
                 Margin="20, 5, 20, 5"/>
-            <Grid VerticalOptions="FillAndExpand">
+            <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="2*"/>
-                    <RowDefinition Height="2*"/>
-                    <RowDefinition Height="1.5*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Frame
                     Margin="20, 5, 20, 7.5"
@@ -43,12 +42,13 @@
                             TextColor="White"
                             FontSize="30"
                             HorizontalTextAlignment="Center"
-                            VerticalTextAlignment="Center"
+                            VerticalTextAlignment="End"
                             VerticalOptions="CenterAndExpand"/>
                         <Image
                             Source="icon_sign_in"
                             WidthRequest="24"
                             BackgroundColor="Transparent"
+                            VerticalOptions="CenterAndExpand"
                             HorizontalOptions="End"
                             Margin="0, 0, 10, 10"/>
                     </StackLayout>
@@ -75,7 +75,7 @@
                             TextColor="White"
                             FontSize="30"
                             HorizontalTextAlignment="Center"
-                            VerticalTextAlignment="Center"
+                            VerticalTextAlignment="End"
                             VerticalOptions="CenterAndExpand"/>
                         <Image
                             Source="icon_sign_in"
@@ -88,14 +88,24 @@
                         <TapGestureRecognizer Command="{Binding GoToExpensesPageCommand}"/>
                     </Frame.GestureRecognizers>
                 </Frame>
+            </Grid>
+            <Grid VerticalOptions="FillAndExpand">
+                <Grid.GestureRecognizers>
+                    <SwipeGestureRecognizer Direction="Right" Swiped="OnForwardSwipe" />
+                    <SwipeGestureRecognizer Direction="Left" Swiped="OnBackwardSwipe" />
+                </Grid.GestureRecognizers>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
                 <Frame
-                    Margin="20, 7.5, 20, 20"
+                    Margin="20, 7.5, 5, 20"
                     Padding="0"
                     CornerRadius="10"
                     HorizontalOptions="FillAndExpand"
                     VerticalOptions="FillAndExpand"
                     BackgroundColor="{StaticResource PrimaryColor}"
-                    Grid.Row="2">
+                    Grid.Column="0">
                     <StackLayout 
                         Spacing="10"
                         Padding="10">
@@ -103,8 +113,33 @@
                             Text="Saldo"
                             TextColor="White"
                             HorizontalOptions="Center"/>
-                        <Label 
+                        <Label
                             Text="{Binding Balance}"
+                            TextColor="White"
+                            FontSize="30"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            VerticalOptions="CenterAndExpand"/>
+                    </StackLayout>
+                </Frame>
+                <Frame
+                    Margin="5, 7.5, 20, 20"
+                    Padding="0"
+                    CornerRadius="10"
+                    HorizontalOptions="FillAndExpand"
+                    VerticalOptions="FillAndExpand"
+                    BackgroundColor="MediumPurple"
+                    Grid.Column="1"
+                    IsVisible="{Binding TitheableIsVisible}">
+                    <StackLayout 
+                        Spacing="10"
+                        Padding="10">
+                        <Label
+                            Text="Dizimável"
+                            TextColor="White"
+                            HorizontalOptions="Center"/>
+                        <Label
+                            Text="{Binding Titheable}"
                             TextColor="White"
                             FontSize="30"
                             HorizontalTextAlignment="Center"
