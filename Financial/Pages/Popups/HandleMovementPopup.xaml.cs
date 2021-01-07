@@ -32,14 +32,14 @@ namespace Financial.Pages.Popups
         {
             if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
             {
-                ViewModel.Description = sender.Text;
-
                 if (string.IsNullOrWhiteSpace(sender.Text))
                     sender.ItemsSource = null;
                 else
                 {
-                    var movements = App.Realm.All<Movement>().Where(m => m.Type == ViewModel.Type).ToList();
-                    sender.ItemsSource = movements.Where(m => m.Description.ToLower().StartsWith(sender.Text.ToLower())).Select(m => m.Description).Distinct().ToList();
+                    var words = App.NormalizeCharacters(sender.Text.ToLower()).Split(' ');
+                    var movements = App.Realm.All<Movement>().Where(m => m.Type == ViewModel.Type).ToList().Select(m => m.Description).ToList();
+
+                    sender.ItemsSource = movements.Where(i => words.All(w => App.NormalizeCharacters(i.ToLower()).Contains(w))).Distinct().ToList();
                 }
             }
         }

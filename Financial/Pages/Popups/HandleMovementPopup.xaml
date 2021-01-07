@@ -5,9 +5,9 @@
     xmlns:d="http://xamarin.com/schemas/2014/forms/design"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+    xmlns:dotMorten="clr-namespace:dotMorten.Xamarin.Forms;assembly=dotMorten.Xamarin.Forms.AutoSuggestBox"
     mc:Ignorable="d"
     x:Class="Financial.Pages.Popups.HandleMovementPopup"
-    xmlns:dotMorten="clr-namespace:dotMorten.Xamarin.Forms;assembly=dotMorten.Xamarin.Forms.AutoSuggestBox"
     CloseWhenBackgroundIsClicked="True">
     <!--<ScrollView>-->
         <AbsoluteLayout
