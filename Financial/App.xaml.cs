@@ -55,6 +55,7 @@ namespace Financial
 
             for (int i = 0; i < accentedCharacters.Length; i++)
                 text = text.Replace(accentedCharacters[i].ToString(), normalCharacters[i].ToString());
+
             return text;
         }
 

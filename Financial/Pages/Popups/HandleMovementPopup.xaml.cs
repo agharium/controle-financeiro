@@ -36,6 +36,8 @@ namespace Financial.Pages.Popups
                     sender.ItemsSource = null;
                 else
                 {
+                    ViewModel.Description = sender.Text;
+
                     var words = App.NormalizeCharacters(sender.Text.ToLower()).Split(' ');
                     var movements = App.Realm.All<Movement>().Where(m => m.Type == ViewModel.Type).ToList().Select(m => m.Description).ToList();
 
@@ -185,14 +187,14 @@ namespace Financial.Pages.Popups
 
         private async Task<bool> FieldsVerification()
         {
-            if (string.IsNullOrWhiteSpace(Description))
-            {
-                await Application.Current.MainPage.DisplayAlert("Alerta", "Descrição não pode ser vazia!", "OK");
-                return false;
-            }
-            else if (Convert.ToDouble(Value) <= 0)
+            if (Convert.ToDouble(Value) <= 0)
             {
                 await Application.Current.MainPage.DisplayAlert("Alerta", "Valor inválido!", "OK");
+                return false;
+            }
+            else if (string.IsNullOrWhiteSpace(Description))
+            {
+                await Application.Current.MainPage.DisplayAlert("Alerta", "Descrição não pode ser vazia!", "OK");
                 return false;
             }
             else
