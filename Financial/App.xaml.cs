@@ -7,10 +7,11 @@ using Xamarin.Forms;
 namespace Financial
 {
     /* TO-DO:
-     * - Em HandleMovementPopup/MovementDetailsPopup ajustar os botões para ficarem na mesma linha, para não ter que rolar o popup para visualizar tudo, de forma completa; e
-     * - Possibilitar maneira de entregar os dízimos SEM descontar os deduzíveis.
-     * - Mostrar somente os números até o dia atual, quando estiver selecionado o mês atual.
-    */ 
+     * - Em HandleMovementPopup/MovementDetailsPopup ajustar os botões para ficarem na mesma linha, para não ter que rolar o popup para visualizar tudo, de forma completa;
+     * - Possibilitar maneira de entregar os dízimos SEM descontar os deduzíveis (ActionSheet/DisplayAlert ao tocar no botão?);
+     * - Mostrar somente os números até o dia atual, quando estiver selecionado o mês atual; e
+     * - Talvez fazer uma opção global que permita desabilitar despesas deduzíveis no app inteiro, assim como funciona com os dízimos? Não sei.. Talvez. Vamos ver como segue.
+    */
     public partial class App : Application
     {
         public const int INCOME = 0;
