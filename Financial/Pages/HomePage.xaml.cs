@@ -24,6 +24,14 @@ namespace Financial.Pages
 
         protected override void OnAppearing()
         {
+            if (App.HOMEPAGE_NEEDS_UPDATE)
+            {
+                ViewModel.TitheableIsVisible = App.UserGivesTithes.ToString();
+                ViewModel.BalanceFrameColSpan = App.UserGivesTithes ? 1 : 2;
+
+                App.HOMEPAGE_NEEDS_UPDATE = false;
+            }
+
             base.OnAppearing();
 
             var backup = ViewModel.MonthYearPickerSelectedItem;
@@ -113,6 +121,17 @@ namespace Financial.Pages
             }
         }
 
+        private int _balanceFrameColSpan;
+        public int BalanceFrameColSpan
+        {
+            get => _balanceFrameColSpan;
+            set
+            {
+                _balanceFrameColSpan = value;
+                Notify("BalanceFrameColSpan");
+            }
+        }
+
         /// MONTH/YEAR PICKER
         private List<string> _monthYearPickerItemsSource;
         public List<string> MonthYearPickerItemsSource
@@ -142,6 +161,7 @@ namespace Financial.Pages
             GoToExpensesPageCommand = new Command(async () => await Shell.Current.GoToAsync($"//expenses"));
 
             TitheableIsVisible = App.UserGivesTithes.ToString();
+            BalanceFrameColSpan = App.UserGivesTithes ? 1 : 2;
 
             PopulateMonthYearPicker();
 
@@ -168,30 +188,50 @@ namespace Financial.Pages
         {
             try
             {
-                double totalIncome, totalExpense, totalTitheable;
+                List<Movement> incomes, expenses;
 
                 if (MonthYearPickerSelectedItem == "Todo o período")
                 {
-                    var movements = App.Realm.All<Movement>().ToList();
+                    incomes = App.Realm.All<Movement>()
+                        .Where(m => m.Type == App.INCOME)
+                        .ToList();
 
-                    totalIncome = movements.Where(m => m.Type == App.INCOME).Sum(m => m.Value);
-                    totalExpense = movements.Where(m => m.Type == App.EXPENSE).Sum(m => m.Value);
-                    totalTitheable = movements.Where(m => m.Type == App.INCOME).Where(m => m.IsTitheable == true).Sum(m => m.Value);
+                    expenses = App.Realm.All<Movement>()
+                        .Where(m => m.Type == App.EXPENSE)
+                        .ToList();
                 }
                 else
                 {
-                    var movements = App.Realm.All<Movement>().OrderByDescending(i => i.Date).ToList();
+                    var movements = App.Realm.All<Movement>()
+                        .ToList()
+                        .Where(m => m.Date_Display_Filter == MonthYearPickerSelectedItem);
 
-                    totalIncome = movements.Where(m => m.Type == App.INCOME).Where(m => m.Date_Display_Filter == MonthYearPickerSelectedItem).Sum(m => m.Value);
-                    totalExpense = movements.Where(m => m.Type == App.EXPENSE).Where(m => m.Date_Display_Filter == MonthYearPickerSelectedItem).Sum(m => m.Value);
-                    totalTitheable = movements.Where(m => m.Type == App.INCOME).Where(m => m.Date_Display_Filter == MonthYearPickerSelectedItem).Where(m => m.IsTitheable == true).Sum(m => m.Value);
+                    incomes = movements
+                        .Where(m => m.Type == App.INCOME)
+                        .ToList();
+
+                    expenses = movements
+                        .Where(m => m.Type == App.EXPENSE)
+                        .ToList();
                 }
 
-                var balance = totalIncome - totalExpense;
+                double totalIncome, totalExpense, totalTitheable, deductable;
+
+                totalIncome = incomes.Sum(m => m.Value);
+                totalExpense = expenses.Sum(m => m.Value);
+
+                deductable = expenses
+                    .Where(m => m.IsDeductable)
+                    .Sum(m => m.Value);
+
+                totalTitheable = incomes
+                    .Where(m => m.IsTitheable)
+                    .Sum(m => m.Value)
+                    - deductable;
 
                 TotalIncome = totalIncome.ToString("C", CultureInfo.CurrentCulture);
                 TotalExpense = totalExpense.ToString("C", CultureInfo.CurrentCulture);
-                Balance = balance.ToString("C", CultureInfo.CurrentCulture);
+                Balance = (totalIncome - totalExpense).ToString("C", CultureInfo.CurrentCulture);
                 Titheable = totalTitheable.ToString("C", CultureInfo.CurrentCulture);
             } catch (Exception ex)
             {

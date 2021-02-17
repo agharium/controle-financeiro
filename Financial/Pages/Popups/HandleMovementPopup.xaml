@@ -63,6 +63,20 @@
                                 <TapGestureRecognizer Command="{Binding ToggleIsTitheableCommand}"/>
                             </StackLayout.GestureRecognizers>
                         </StackLayout>
+                        <StackLayout 
+                            Orientation="Horizontal"
+                            IsVisible="{Binding IsDeductableVisible}">
+                            <CheckBox 
+                                IsChecked="{Binding IsDeductable}"
+                                IsEnabled="{Binding IsDeductableEnabled}"
+                                Color="{Binding IsDeductableColor}"/>
+                            <Label 
+                                Text="Deduzir esta despesa no cálculo dos dízimos"
+                                VerticalTextAlignment="Center"/>
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding ToggleIsDeductableCommand}"/>
+                            </StackLayout.GestureRecognizers>
+                        </StackLayout>
                         <Button
                             Text="Salvar"
                             TextColor="White"

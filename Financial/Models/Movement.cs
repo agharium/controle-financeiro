@@ -17,6 +17,7 @@ namespace Financial.Models
         public DateTimeOffset Date { get; set; }
         public bool IsTitheable { get; set; }
         public bool Handed { get; set; }
+        public bool IsDeductable { get; set; }
 
         [Ignored]
         public string Value_Display
@@ -62,17 +63,18 @@ namespace Financial.Models
 
         public Movement() {}
 
-        public Movement(int _type, double _value, string _description, DateTime _date, bool _isTitheable)
+        public Movement(int _type, double _value, string _description, DateTime _date, bool _isTitheable = false, bool _isDeductable = false, bool _isHanded = false)
         {
             _date = DateTime.SpecifyKind(_date, DateTimeKind.Unspecified);
 
-            Id = App.MOVEMENT_ID++;
+            Id = App.CURRENT_INCREMENT_MOVEMENT_ID++;
             Type = _type;
             Value = _value;
             Description = _description;
-            IsTitheable = _isTitheable;
             Date = new DateTimeOffset(_date, TimeSpan.Zero);
-            Handed = false;
+            IsTitheable = _isTitheable;
+            IsDeductable = _isDeductable;
+            Handed = _isHanded;
         }
     }
 }

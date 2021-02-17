@@ -23,7 +23,10 @@ namespace Financial.Pages
 
                 var extra = !e.Value ? "des" : "";
                 App.Toast("Funcionalidade de controle de dízimos " + extra + "ativada.");
+
+                App.HOMEPAGE_NEEDS_UPDATE = true;
             }
+
             firstTime = false;
         }
     }

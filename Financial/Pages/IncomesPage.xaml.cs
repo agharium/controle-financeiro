@@ -242,18 +242,26 @@ namespace Financial.Pages
             else
                 IncomesBackup = Incomes = new ObservableCollection<Movement>();
 
+            var deductable = App.Realm.All<Movement>()
+                .Where(m => m.Type == App.EXPENSE)
+                .Where(m => m.IsDeductable)
+                .Where(m => !m.Handed)
+                .ToList()
+                .Where(m => m.Date_Display_Filter == MonthYearPickerSelectedItem)
+                .Sum(m => m.Value);
+
             var revenues = Incomes.Sum(i => i.Value);
-            var remainingTithes = Incomes.Where(i => i.IsTitheable == true).Where(i => i.Handed == false).Sum(i => i.Value) * 0.1;
+            var remainingTithes = (Incomes.Where(i => i.IsTitheable == true).Where(i => i.Handed == false).Sum(i => i.Value) - deductable) * .1;
             var totalTithes = Incomes.Where(i => i.IsTitheable == true).Sum(i => i.Value) * 0.1;
 
             Revenues = revenues.ToString("C", CultureInfo.CurrentCulture);
             RemainingTithes = remainingTithes.ToString("C", CultureInfo.CurrentCulture);
             TotalTithes = totalTithes.ToString("C", CultureInfo.CurrentCulture);
 
-            HandAllTithesIsEnabled = remainingTithes > 0 ? true : false;
+            HandAllTithesIsEnabled = remainingTithes > 0;
             HandAllTithesButtonColor = HandAllTithesIsEnabled ? ((Color)Application.Current.Resources["PrimaryColor"]).ToHex() : Color.LightGray.ToHex();
 
-            TipIsVisible = Incomes.Count() == 0 ? true : false;
+            TipIsVisible = Incomes.Count() == 0;
         }
 
         private void OpenHandleMovementPopupSaveIncome() => PopupNavigation.Instance.PushAsync(new HandleMovementPopup(App.INCOME, App.OP_SAVE));
@@ -264,8 +272,8 @@ namespace Financial.Pages
         {
             List<string> options = new List<string>();
 
-            if (App.UserGivesTithes && Income.IsTitheable && Income.Handed == false)
-                options.Add("Entregar");
+            /*if (App.UserGivesTithes && Income.IsTitheable && Income.Handed == false)
+                options.Add("Entregar");*/
 
             options.Add("Editar");
             options.Add("Excluir");
@@ -274,21 +282,21 @@ namespace Financial.Pages
             
             switch (actionSheet)
             {
-                case "Entregar":
-                    if (await Shell.Current.DisplayAlert(Income.Tithes_Display, "Entregar dízimos referentes a esta entrada?", "Sim", "Não"))
-                    {
-                        using (var trans = App.Realm.BeginWrite())
-                        {
-                            Income.Handed = true;
-                            trans.Commit();
-                        }
-                        UpdateCollection();
-                        App.Toast("Dízimo entregue com sucesso.");
+                //case "Entregar":
+                //    if (await Shell.Current.DisplayAlert(Income.Tithes_Display, "Entregar dízimos referentes a esta entrada?", "Sim", "Não"))
+                //    {
+                //        using (var trans = App.Realm.BeginWrite())
+                //        {
+                //            Income.Handed = true;
+                //            trans.Commit();
+                //        }
+                //        UpdateCollection();
+                //        App.Toast("Dízimo entregue com sucesso.");
 
-                        var expense = new Movement(App.EXPENSE, Convert.ToDouble(Income.Value * 0.1), "Dízimo de " + Income.Value_Display, DateTime.Now, false);
-                        App.Realm.Write(() => { App.Realm.Add(expense); });
-                    }
-                    break;
+                //        var expense = new Movement(App.EXPENSE, Convert.ToDouble(Income.Value * 0.1), "Dízimo de " + Income.Value_Display, DateTime.Now, false);
+                //        App.Realm.Write(() => { App.Realm.Add(expense); });
+                //    }
+                //    break;
                 case "Editar":
                     await PopupNavigation.Instance.PushAsync(new HandleMovementPopup(App.INCOME, App.OP_UPDATE, Income));
                     break;
@@ -325,24 +333,44 @@ namespace Financial.Pages
         {
             if (await Application.Current.MainPage.DisplayAlert(RemainingTithes, "Entregar dízimos neste valor?", "Sim", "Não"))
             {
-                double total = 0;
-                foreach (var i in Incomes)
+                var incomes = Incomes
+                    .Where(i => i.IsTitheable)
+                    .Where(i => !i.Handed)
+                    .ToList()
+                    .Where(m => m.Date_Display_Filter == MonthYearPickerSelectedItem);
+
+                foreach (var i in incomes)
                 {
                     using (var trans = App.Realm.BeginWrite())
                     {
-                        if (i.IsTitheable && i.Handed == false)
-                        {
-                            total += i.Value;
-                            i.Handed = true;
-                            trans.Commit();
-                        }
+                        i.Handed = true;
+                        trans.Commit();
                     }
                 }
+
+                var deductables = App.Realm.All<Movement>()
+                    .Where(m => m.Type == App.EXPENSE)
+                    .Where(m => m.IsDeductable)
+                    .Where(i => !i.Handed)
+                    .ToList()
+                    .Where(m => m.Date_Display_Filter == MonthYearPickerSelectedItem);
+
+                foreach (var d in deductables)
+                {
+                    using (var trans = App.Realm.BeginWrite())
+                    {
+                        d.Handed = true;
+                        trans.Commit();
+                    }
+                }
+
                 UpdateCollection();
                 App.Toast("Dízimos entregues.");
 
-                var expense = new Movement(App.EXPENSE, total * 0.1, "Dízimos de " + (total).ToString("C", CultureInfo.CurrentCulture), DateTime.Now, false);
+                var total = incomes.Sum(i => i.Value) - deductables.Sum(d => d.Value);
+                var expense = new Movement(App.EXPENSE, total * 0.1, "Dízimos de " + (total).ToString("C", CultureInfo.CurrentCulture), DateTime.Now, false, false, true);
                 App.Realm.Write(() => { App.Realm.Add(expense); });
+                App.ExpensesViewModel.UpdateCollection();
             }
         }
     }

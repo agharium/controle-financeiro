@@ -18,135 +18,141 @@
                 HorizontalOptions="FillAndExpand"
                 VerticalOptions="Center"
                 Margin="20, 5, 20, 5"/>
-            <Grid>
+            <Grid VerticalOptions="FillAndExpand">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="2*"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <Frame
-                    Margin="20, 5, 20, 7.5"
-                    Padding="0"
-                    CornerRadius="10"
-                    HorizontalOptions="FillAndExpand"
-                    VerticalOptions="FillAndExpand"
-                    BackgroundColor="{StaticResource IncomesColor}"
-                    Grid.Row="0">
-                    <StackLayout Spacing="0">
-                        <Label
-                            Text="Entradas"
-                            TextColor="White"
-                            HorizontalOptions="Center"
-                            Margin="10"/>
-                        <Label 
-                            Text="{Binding TotalIncome}"
-                            TextColor="White"
-                            FontSize="30"
-                            HorizontalTextAlignment="Center"
-                            VerticalTextAlignment="End"
-                            VerticalOptions="CenterAndExpand"/>
-                        <Image
-                            Source="icon_sign_in"
-                            WidthRequest="24"
-                            BackgroundColor="Transparent"
-                            VerticalOptions="CenterAndExpand"
-                            HorizontalOptions="End"
-                            Margin="0, 0, 10, 10"/>
-                    </StackLayout>
-                    <Frame.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding GoToIncomesPageCommand}"/>
-                    </Frame.GestureRecognizers>
-                </Frame>
-                <Frame
-                    Margin="20, 7.5, 20, 7.5"
-                    Padding="0"
-                    CornerRadius="10"
-                    HorizontalOptions="FillAndExpand"
-                    VerticalOptions="FillAndExpand"
-                    BackgroundColor="{StaticResource ExpensesColor}"
-                    Grid.Row="1">
-                    <StackLayout Spacing="0">
-                        <Label
-                            Text="Despesas"
-                            TextColor="White"
-                            HorizontalOptions="Center"
-                            Margin="10"/>
-                        <Label 
-                            Text="{Binding TotalExpense}"
-                            TextColor="White"
-                            FontSize="30"
-                            HorizontalTextAlignment="Center"
-                            VerticalTextAlignment="End"
-                            VerticalOptions="CenterAndExpand"/>
-                        <Image
-                            Source="icon_sign_in"
-                            WidthRequest="24"
-                            BackgroundColor="Transparent"
-                            HorizontalOptions="End"
-                            Margin="0, 0, 10, 10"/>
-                    </StackLayout>
-                    <Frame.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding GoToExpensesPageCommand}"/>
-                    </Frame.GestureRecognizers>
-                </Frame>
-            </Grid>
-            <Grid VerticalOptions="FillAndExpand">
-                <Grid.GestureRecognizers>
-                    <SwipeGestureRecognizer Direction="Right" Swiped="OnForwardSwipe" />
-                    <SwipeGestureRecognizer Direction="Left" Swiped="OnBackwardSwipe" />
-                </Grid.GestureRecognizers>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Frame
-                    Margin="20, 7.5, 5, 20"
-                    Padding="0"
-                    CornerRadius="10"
-                    HorizontalOptions="FillAndExpand"
-                    VerticalOptions="FillAndExpand"
-                    BackgroundColor="{StaticResource PrimaryColor}"
-                    Grid.Column="0">
-                    <StackLayout 
-                        Spacing="10"
-                        Padding="10">
-                        <Label
-                            Text="Saldo"
-                            TextColor="White"
-                            HorizontalOptions="Center"/>
-                        <Label
-                            Text="{Binding Balance}"
-                            TextColor="White"
-                            FontSize="30"
-                            HorizontalTextAlignment="Center"
-                            VerticalTextAlignment="Center"
-                            VerticalOptions="CenterAndExpand"/>
-                    </StackLayout>
-                </Frame>
-                <Frame
-                    Margin="5, 7.5, 20, 20"
-                    Padding="0"
-                    CornerRadius="10"
-                    HorizontalOptions="FillAndExpand"
-                    VerticalOptions="FillAndExpand"
-                    BackgroundColor="MediumPurple"
-                    Grid.Column="1"
-                    IsVisible="{Binding TitheableIsVisible}">
-                    <StackLayout 
-                        Spacing="10"
-                        Padding="10">
-                        <Label
-                            Text="Dizimável"
-                            TextColor="White"
-                            HorizontalOptions="Center"/>
-                        <Label
-                            Text="{Binding Titheable}"
-                            TextColor="White"
-                            FontSize="30"
-                            HorizontalTextAlignment="Center"
-                            VerticalTextAlignment="Center"
-                            VerticalOptions="CenterAndExpand"/>
-                    </StackLayout>
-                </Frame>
+                <Grid Grid.Row="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Frame
+                        Margin="20, 7.5, 20, 10"
+                        Padding="0"
+                        CornerRadius="10"
+                        HorizontalOptions="FillAndExpand"
+                        VerticalOptions="FillAndExpand"
+                        BackgroundColor="{StaticResource IncomesColor}"
+                        Grid.Row="0">
+                        <StackLayout Spacing="0">
+                            <Label
+                                Text="Entradas"
+                                TextColor="White"
+                                HorizontalOptions="Center"
+                                Margin="10"/>
+                            <Label 
+                                Text="{Binding TotalIncome}"
+                                TextColor="White"
+                                FontSize="30"
+                                HorizontalTextAlignment="Center"
+                                VerticalTextAlignment="End"
+                                VerticalOptions="CenterAndExpand"/>
+                            <Image
+                                Source="icon_sign_in"
+                                WidthRequest="24"
+                                BackgroundColor="Transparent"
+                                HorizontalOptions="End"
+                                Margin="0, 0, 10, 10"/>
+                        </StackLayout>
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding GoToIncomesPageCommand}"/>
+                        </Frame.GestureRecognizers>
+                    </Frame>
+                    <Frame
+                        Margin="20, 10, 20, 0"
+                        Padding="0"
+                        CornerRadius="10"
+                        HorizontalOptions="FillAndExpand"
+                        VerticalOptions="FillAndExpand"
+                        BackgroundColor="{StaticResource ExpensesColor}"
+                        Grid.Row="1">
+                        <StackLayout Spacing="0">
+                            <Label
+                                Text="Despesas"
+                                TextColor="White"
+                                HorizontalOptions="Center"
+                                Margin="10"/>
+                            <Label 
+                                Text="{Binding TotalExpense}"
+                                TextColor="White"
+                                FontSize="30"
+                                HorizontalTextAlignment="Center"
+                                VerticalTextAlignment="End"
+                                VerticalOptions="CenterAndExpand"/>
+                            <Image
+                                Source="icon_sign_in"
+                                WidthRequest="24"
+                                BackgroundColor="Transparent"
+                                HorizontalOptions="End"
+                                Margin="0, 0, 10, 10"/>
+                        </StackLayout>
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding GoToExpensesPageCommand}"/>
+                        </Frame.GestureRecognizers>
+                    </Frame>
+                </Grid>
+                <Grid Grid.Row="1">
+                    <Grid.GestureRecognizers>
+                        <SwipeGestureRecognizer Direction="Right" Swiped="OnForwardSwipe" />
+                        <SwipeGestureRecognizer Direction="Left" Swiped="OnBackwardSwipe" />
+                    </Grid.GestureRecognizers>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Frame
+                        Margin="20"
+                        Padding="0"
+                        CornerRadius="10"
+                        HorizontalOptions="FillAndExpand"
+                        VerticalOptions="FillAndExpand"
+                        BackgroundColor="{StaticResource PrimaryColor}"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="{Binding BalanceFrameColSpan}">
+                        <StackLayout 
+                            Spacing="10"
+                            Padding="10">
+                            <Label
+                                Text="Saldo"
+                                TextColor="White"
+                                HorizontalOptions="Center"/>
+                            <Label
+                                Text="{Binding Balance}"
+                                TextColor="White"
+                                FontSize="30"
+                                HorizontalTextAlignment="Center"
+                                VerticalTextAlignment="Center"
+                                VerticalOptions="CenterAndExpand"/>
+                        </StackLayout>
+                    </Frame>
+                    <Frame
+                        Margin="0, 20, 20, 20"
+                        Padding="0"
+                        CornerRadius="10"
+                        HorizontalOptions="FillAndExpand"
+                        VerticalOptions="FillAndExpand"
+                        BackgroundColor="#1abc9c"
+                        Grid.Column="1"
+                        IsVisible="{Binding TitheableIsVisible}">
+                        <StackLayout
+                            Spacing="10"
+                            Padding="10">
+                            <Label
+                                Text="Lucro (dizimável)"
+                                TextColor="White"
+                                HorizontalOptions="Center"/>
+                            <Label
+                                Text="{Binding Titheable}"
+                                TextColor="White"
+                                FontSize="30"
+                                HorizontalTextAlignment="Center"
+                                VerticalTextAlignment="Center"
+                                VerticalOptions="CenterAndExpand"/>
+                        </StackLayout>
+                    </Frame>
+                </Grid>
             </Grid>
         </StackLayout>
     </ContentPage.Content>

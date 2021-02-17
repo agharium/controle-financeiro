@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -201,9 +200,11 @@ namespace Financial.Pages
                         {
                             App.Realm.Remove(Expense);
                             trans.Commit();
-                            UpdateCollection(true, false, true);
-                            App.Toast("Despesa excluída com sucesso.");
                         }
+
+                        UpdateCollection(true, false, true);
+                        App.Toast("Despesa excluída com sucesso.");
+                        App.IncomesViewModel.UpdateCollection();
                     }
                     break;
                 default:

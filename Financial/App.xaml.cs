@@ -2,11 +2,15 @@
 using Financial.Services;
 using Plugin.Settings;
 using Realms;
-using System;
 using Xamarin.Forms;
 
 namespace Financial
 {
+    /* TO-DO:
+     * - Em HandleMovementPopup/MovementDetailsPopup ajustar os botões para ficarem na mesma linha, para não ter que rolar o popup para visualizar tudo, de forma completa; e
+     * - Possibilitar maneira de entregar os dízimos SEM descontar os deduzíveis.
+     * - Mostrar somente os números até o dia atual, quando estiver selecionado o mês atual.
+    */ 
     public partial class App : Application
     {
         public const int INCOME = 0;
@@ -14,17 +18,25 @@ namespace Financial
         public const int OP_SAVE = 0;
         public const int OP_UPDATE = 1;
 
+        public static bool HOMEPAGE_NEEDS_UPDATE = false;
+
         public static string HomePageSelectedDateFilter = null;
         public static IncomesPageViewModel IncomesViewModel = null;
         public static ExpensesPageViewModel ExpensesViewModel = null;
 
-        public static ulong RealmSchemaVersion = 1;
+        public static ulong RealmSchemaVersion = 2;
         public static Realm Realm => Realm.GetInstance(new RealmConfiguration() { SchemaVersion = RealmSchemaVersion });
 
-        public static int MOVEMENT_ID
+        public static int CURRENT_INCREMENT_MOVEMENT_ID
         {
-            get => CrossSettings.Current.GetValueOrDefault(nameof(MOVEMENT_ID), 1);
-            set => CrossSettings.Current.AddOrUpdateValue(nameof(MOVEMENT_ID), value);
+            get => CrossSettings.Current.GetValueOrDefault(nameof(CURRENT_INCREMENT_MOVEMENT_ID), 1);
+            set => CrossSettings.Current.AddOrUpdateValue(nameof(CURRENT_INCREMENT_MOVEMENT_ID), value);
+        }
+
+        public static int CURRENT_INCREMENT_PROFILE_ID
+        {
+            get => CrossSettings.Current.GetValueOrDefault(nameof(CURRENT_INCREMENT_PROFILE_ID), 1);
+            set => CrossSettings.Current.AddOrUpdateValue(nameof(CURRENT_INCREMENT_PROFILE_ID), value);
         }
 
         public static bool UserGivesTithes
