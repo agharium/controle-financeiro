@@ -9,8 +9,9 @@ namespace Financial
     /* TO-DO:
      * - Em HandleMovementPopup/MovementDetailsPopup ajustar os botões para ficarem na mesma linha, para não ter que rolar o popup para visualizar tudo, de forma completa;
      * - Possibilitar maneira de entregar os dízimos SEM descontar os deduzíveis (ActionSheet/DisplayAlert ao tocar no botão?);
-     * - Mostrar somente os números até o dia atual, quando estiver selecionado o mês atual; e
-     * - Talvez fazer uma opção global que permita desabilitar despesas deduzíveis no app inteiro, assim como funciona com os dízimos? Não sei.. Talvez. Vamos ver como segue.
+     * - Mostrar somente os números até o dia atual, quando estiver selecionado o mês atual;
+     * - Talvez fazer uma opção global que permita desabilitar despesas deduzíveis no app inteiro, assim como funciona com os dízimos? Não sei.. Talvez. Vamos ver como segue; e
+     * - No cálculo de dízimos, deve ser levado em conta as despesas deduzíveis de TODO o histórico, não somente do mês atual (como está atualmente).
     */
     public partial class App : Application
     {
@@ -32,12 +33,6 @@ namespace Financial
         {
             get => CrossSettings.Current.GetValueOrDefault(nameof(CURRENT_INCREMENT_MOVEMENT_ID), 1);
             set => CrossSettings.Current.AddOrUpdateValue(nameof(CURRENT_INCREMENT_MOVEMENT_ID), value);
-        }
-
-        public static int CURRENT_INCREMENT_PROFILE_ID
-        {
-            get => CrossSettings.Current.GetValueOrDefault(nameof(CURRENT_INCREMENT_PROFILE_ID), 1);
-            set => CrossSettings.Current.AddOrUpdateValue(nameof(CURRENT_INCREMENT_PROFILE_ID), value);
         }
 
         public static bool UserGivesTithes
