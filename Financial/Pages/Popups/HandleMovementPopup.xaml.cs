@@ -67,27 +67,14 @@ namespace Financial.Pages.Popups
                 Notify("IsTitheable");
             }
         }
-        private bool _isDeductable;
-        public bool IsDeductable
-        {
-            get => _isDeductable;
-            set
-            {
-                _isDeductable = value;
-                Notify("IsDeductable");
-            }
-        }
 
         public string Title { get; set; }
         public DateTime MaxDate { get; set; }
+        public string IsTitheableText { get; set; }
         public bool IsTitheableVisible { get; set; }
         public bool IsTitheableEnabled { get; set; }
         public string IsTitheableColor { get; set; }
         public ICommand ToggleIsTitheableCommand { get; set; }
-        public bool IsDeductableVisible { get; set; }
-        public bool IsDeductableEnabled { get; set; }
-        public string IsDeductableColor { get; set; }
-        public ICommand ToggleIsDeductableCommand { get; set; }
 
         public ICommand SaveMovementCommand { get; set; }
 
@@ -101,24 +88,26 @@ namespace Financial.Pages.Popups
             MaxDate = Date.AddMonths(1);
             Description = "";
 
-            IsTitheableColor = IsDeductableColor = ((Color)Application.Current.Resources["PrimaryColor"]).ToHex();
-            if (Type == App.INCOME)
-                IsTitheableVisible = IsTitheableEnabled = App.UserGivesTithes;
-            else
-                IsDeductableVisible = IsDeductableEnabled = App.UserGivesTithes;
-
+            IsTitheableText = Type == App.INCOME ? "Entregar dízimos desta entrada" : "Deduzir esta despesa no cálculo dos dízimos";
+            IsTitheableColor = ((Color)Application.Current.Resources["PrimaryColor"]).ToHex();
+            IsTitheableVisible = IsTitheableEnabled = App.UserGivesTithes;
             ToggleIsTitheableCommand = new Command(ToggleIsTitheable);
-            ToggleIsDeductableCommand = new Command(ToggleIsDeductable);
 
-            if (Type == App.INCOME && Operation == App.OP_SAVE)
+            if (Operation == App.OP_SAVE)
             {
-                SaveMovementCommand = new Command(SaveIncome);
-                Title = "Nova entrada";
-                IsTitheable = IsTitheableVisible;
-            } else if (Type == App.INCOME && Operation == App.OP_UPDATE)
+                if (Type == App.INCOME)
+                {
+                    SaveMovementCommand = new Command(SaveIncome);
+                    IsTitheable = IsTitheableVisible;
+                } else
+                {
+                    SaveMovementCommand = new Command(SaveExpense);
+                    IsTitheable = !IsTitheableVisible;
+                }
+
+                Title = "Nova ";
+            } else
             {
-                SaveMovementCommand = new Command(UpdateIncome);
-                Title = "Editar entrada";
                 Value = Convert.ToString(Movement.Value);
                 Description = Movement.Description;
                 Date = Movement.Date.DateTime;
@@ -126,22 +115,26 @@ namespace Financial.Pages.Popups
                 IsTitheableEnabled = !Movement.Handed;
                 if (!IsTitheableEnabled)
                     IsTitheableColor = "Gray";
-            } else if (Type == App.EXPENSE && Operation == App.OP_SAVE)
-            {
-                SaveMovementCommand = new Command(SaveExpense);
-                Title = "Nova despesa";
-            } else if (Type == App.EXPENSE && Operation == App.OP_UPDATE)
-            {
-                SaveMovementCommand = new Command(UpdateExpense);
-                Title = "Editar despesa";
-                Value = Convert.ToString(Movement.Value);
-                Description = Movement.Description;
-                Date = Movement.Date.DateTime;
-                IsDeductable = Movement.IsDeductable;
-                IsDeductableEnabled = !Movement.Handed;
-                if (!IsDeductableEnabled)
-                    IsDeductableColor = "Gray";
+
+                SaveMovementCommand = Type == App.INCOME ? new Command(UpdateIncome) : new Command(UpdateExpense);
+
+                Title = "Editar ";
             }
+
+            Title += Type == App.INCOME ? "entrada" : "despesa";
+
+            //if (Type == App.INCOME && Operation == App.OP_SAVE)
+            //{
+            //    SaveMovementCommand = new Command(SaveIncome);
+            //    IsTitheable = IsTitheableVisible;
+            //} else if (Type == App.INCOME && Operation == App.OP_UPDATE)
+            //    SaveMovementCommand = new Command(UpdateIncome);
+            //else if (Type == App.EXPENSE && Operation == App.OP_SAVE)
+            //{
+            //    SaveMovementCommand = new Command(SaveExpense);
+            //    IsTitheable = !IsTitheableVisible;
+            //} else if (Type == App.EXPENSE && Operation == App.OP_UPDATE)
+            //    SaveMovementCommand = new Command(UpdateExpense);
         }
 
         private async void SaveIncome()
@@ -181,7 +174,7 @@ namespace Financial.Pages.Popups
         {
             if (await FieldsVerification())
             {
-                var expense = new Movement(App.EXPENSE, Convert.ToDouble(Value), Description, Date, false, IsDeductable);
+                var expense = new Movement(App.EXPENSE, Convert.ToDouble(Value), Description, Date, IsTitheable, false);
                 App.Realm.Write(() => { App.Realm.Add(expense); });
                 App.ExpensesViewModel.UpdateCollection(true, true);
                 App.IncomesViewModel.UpdateCollection();
@@ -201,7 +194,7 @@ namespace Financial.Pages.Popups
                     Movement.Value = Convert.ToDouble(Value);
                     Movement.Description = Description;
                     Movement.Date = new DateTimeOffset(Date, TimeSpan.Zero);
-                    Movement.IsDeductable = IsDeductable;
+                    Movement.IsTitheable = IsTitheable;
                     trans.Commit();
                 }
 
@@ -234,10 +227,10 @@ namespace Financial.Pages.Popups
                 IsTitheable = !IsTitheable;
         }
 
-        private void ToggleIsDeductable()
-        {
-            if (IsDeductableEnabled)
-                IsDeductable = !IsDeductable;
-        }
+        //private void ToggleIsDeductable()
+        //{
+        //    if (IsDeductableEnabled)
+        //        IsDeductable = !IsDeductable;
+        //}
     }
 }

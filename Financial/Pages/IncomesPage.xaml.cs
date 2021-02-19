@@ -15,7 +15,7 @@ namespace Financial.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class IncomesPage : ContentPage
     {
-        IncomesPageViewModel ViewModel = new IncomesPageViewModel();
+        IncomesPageViewModel ViewModel = App.IncomesViewModel;
         public IncomesPage()
         {
             InitializeComponent();
@@ -184,8 +184,6 @@ namespace Financial.Pages
 
         public IncomesPageViewModel()
         {
-            App.IncomesViewModel = this;
-
             OpenHandleMovementPopupSaveIncomeCommand = new Command(OpenHandleMovementPopupSaveIncome);
             OpenMovementDetailsPopupIncomeCommand = new Command<Movement>(OpenMovementDetailsPopupIncome);
             OpenMoreOptionsActionSheetCommand = new Command<Movement>(OpenMoreOptionsActionSheet);
@@ -244,7 +242,7 @@ namespace Financial.Pages
 
             var deductable = App.Realm.All<Movement>()
                 .Where(m => m.Type == App.EXPENSE)
-                .Where(m => m.IsDeductable)
+                .Where(m => m.IsTitheable)
                 .Where(m => !m.Handed)
                 .ToList()
                 .Where(m => m.Date_Display_Filter == MonthYearPickerSelectedItem)
@@ -350,7 +348,7 @@ namespace Financial.Pages
 
                 var deductables = App.Realm.All<Movement>()
                     .Where(m => m.Type == App.EXPENSE)
-                    .Where(m => m.IsDeductable)
+                    .Where(m => m.IsTitheable)
                     .Where(i => !i.Handed)
                     .ToList()
                     .Where(m => m.Date_Display_Filter == MonthYearPickerSelectedItem);
@@ -368,7 +366,7 @@ namespace Financial.Pages
                 App.Toast("Dízimos entregues.");
 
                 var total = incomes.Sum(i => i.Value) - deductables.Sum(d => d.Value);
-                var expense = new Movement(App.EXPENSE, total * 0.1, "Dízimos de " + (total).ToString("C", CultureInfo.CurrentCulture), DateTime.Now, false, false, true);
+                var expense = new Movement(App.EXPENSE, total * 0.1, "Dízimos de " + (total).ToString("C", CultureInfo.CurrentCulture), DateTime.Now, false, true);
                 App.Realm.Write(() => { App.Realm.Add(expense); });
                 App.ExpensesViewModel.UpdateCollection();
             }

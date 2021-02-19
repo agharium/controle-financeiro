@@ -221,7 +221,7 @@ namespace Financial.Pages
                 totalExpense = expenses.Sum(m => m.Value);
 
                 deductable = expenses
-                    .Where(m => m.IsDeductable)
+                    .Where(m => m.IsTitheable)
                     .Sum(m => m.Value);
 
                 totalTitheable = incomes

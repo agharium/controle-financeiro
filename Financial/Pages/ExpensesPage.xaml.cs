@@ -15,7 +15,7 @@ namespace Financial.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ExpensesPage : ContentPage
     {
-        ExpensesPageViewModel ViewModel = new ExpensesPageViewModel();
+        ExpensesPageViewModel ViewModel = App.ExpensesViewModel;
         public ExpensesPage()
         {
             InitializeComponent();
@@ -119,8 +119,6 @@ namespace Financial.Pages
         /// MONTH/YEAR PICKER
         public ExpensesPageViewModel()
         {
-            App.ExpensesViewModel = this;
-
             OpenHandleMovementPopupSaveExpenseCommand = new Command(OpenHandleMovementPopupSaveExpense);
             OpenMovementDetailsPopupExpenseCommand = new Command<Movement>(OpenMovementDetailsPopupExpense);
             OpenMoreOptionsActionSheetCommand = new Command<Movement>(OpenMoreOptionsActionSheet);

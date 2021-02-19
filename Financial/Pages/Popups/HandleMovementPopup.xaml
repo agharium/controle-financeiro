@@ -57,13 +57,13 @@
                                 IsEnabled="{Binding IsTitheableEnabled}"
                                 Color="{Binding IsTitheableColor}"/>
                             <Label 
-                                Text="Entregar dízimos desta entrada"
+                                Text="{Binding IsTitheableText}"
                                 VerticalTextAlignment="Center"/>
                             <StackLayout.GestureRecognizers>
                                 <TapGestureRecognizer Command="{Binding ToggleIsTitheableCommand}"/>
                             </StackLayout.GestureRecognizers>
                         </StackLayout>
-                        <StackLayout 
+                        <!--<StackLayout 
                             Orientation="Horizontal"
                             IsVisible="{Binding IsDeductableVisible}">
                             <CheckBox 
@@ -76,7 +76,7 @@
                             <StackLayout.GestureRecognizers>
                                 <TapGestureRecognizer Command="{Binding ToggleIsDeductableCommand}"/>
                             </StackLayout.GestureRecognizers>
-                        </StackLayout>
+                        </StackLayout>-->
                         <Button
                             Text="Salvar"
                             TextColor="White"

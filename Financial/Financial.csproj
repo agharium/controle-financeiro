@@ -9,9 +9,8 @@
     <PackageReference Include="dotMorten.Xamarin.Forms.AutoSuggestBox" Version="1.1.1" />
     <PackageReference Include="Realm" Version="10.1.0" />
     <PackageReference Include="Rg.Plugins.Popup" Version="2.0.0.10" />
-    <PackageReference Include="Xam.Plugins.Settings" Version="3.1.1" />
-    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2012" />
     <PackageReference Include="Xamarin.Essentials" Version="1.6.1" />
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2012" />
   </ItemGroup>
 
   <ItemGroup>
@@ -46,9 +45,6 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Pages\Popups\MovementDetailsPopup.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Pages\ProfilePage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Pages\SettingsPage.xaml">
