@@ -12,7 +12,7 @@ namespace Financial
      * - Mostrar somente os números do resumo até o dia atual, quando estiver selecionado o mês atual;
      * - Talvez fazer uma opção global que permita desabilitar despesas deduzíveis no app inteiro, assim como funciona com os dízimos? Não sei.. Talvez. Vamos ver como segue;
      * - No cálculo de dízimos, deve ser levado em conta as despesas deduzíveis de TODO o histórico, não somente do mês atual (como está atualmente); e
-     * - Adicionar na lista de despesas um dizer em cada ocorrência mostrando se é deduzível ou não e riscar caso já tenha sido deduzido.
+     * - Mostrar no MovementDetailsPopup dados acerca de dízimos e dedução.
     */
     public partial class App : Application
     {

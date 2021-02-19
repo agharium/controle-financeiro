@@ -26,13 +26,10 @@ namespace Financial.Models
         [Ignored]
         public string Description_Display
         {
-            get
-            {
-                if (Description.Length > 20)
-                    return Description.Substring(0, Math.Min(Description.Length, 20)) + "...";
-                else
-                    return Description;
-            }
+            get => 
+                Description.Length > 20
+                    ? Description.Substring(0, Math.Min(Description.Length, 20)) + "..."
+                    : Description;
         }
         [Ignored]
         public string Date_Display
@@ -47,17 +44,30 @@ namespace Financial.Models
         [Ignored]
         public string Tithes_Display
         {
-            get => IsTitheable && App.UserGivesTithes ? "(10%) " + (Value * 0.1).ToString("C", CultureInfo.CurrentCulture) : "";
+            get => 
+                IsTitheable && App.UserGivesTithes
+                    ? Type == App.INCOME
+                        ? "(10%) " + (Value * 0.1).ToString("C", CultureInfo.CurrentCulture)
+                        : Handed
+                            ? "Deduzido"
+                            : "Deduzível"
+                    : "";
         }
         [Ignored]
         public string Tithes_Display_Color
         {
-            get => Handed ? ((Color)Application.Current.Resources["IncomesColor"]).ToHex() : ((Color)Application.Current.Resources["PrimaryColor"]).ToHex();
+            get => 
+                Handed
+                    ? ((Color)Application.Current.Resources["IncomesColor"]).ToHex()
+                    : ((Color)Application.Current.Resources["PrimaryColor"]).ToHex();
         }
         [Ignored]
         public TextDecorations Tithes_Display_Decoration
         {
-            get => Handed ? TextDecorations.Strikethrough : TextDecorations.None;
+            get => 
+                Handed
+                    ? TextDecorations.Strikethrough
+                    : TextDecorations.None;
         }
 
         public Movement() {}

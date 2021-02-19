@@ -89,6 +89,14 @@
                                     Grid.Column="0"
                                     Grid.Row="1"/>
                                 <Label
+                                    Text="{Binding Tithes_Display}"
+                                    TextColor="{Binding Tithes_Display_Color}"
+                                    TextDecorations="{Binding Tithes_Display_Decoration}"
+                                    HorizontalOptions="End"
+                                    VerticalTextAlignment="Center"
+                                    Grid.Column="1"
+                                    Grid.Row="0"/>
+                                <Label
                                     Text="{Binding Date_Display}"
                                     HorizontalOptions="End"
                                     Grid.Column="1"
