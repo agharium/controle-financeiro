@@ -193,11 +193,11 @@ namespace Financial.Pages
                 if (MonthYearPickerSelectedItem == "Todo o período")
                 {
                     incomes = App.Realm.All<Movement>()
-                        .Where(m => m.Type == App.INCOME)
+                        .Where(m => m.Type == App.T_INCOME)
                         .ToList();
 
                     expenses = App.Realm.All<Movement>()
-                        .Where(m => m.Type == App.EXPENSE)
+                        .Where(m => m.Type == App.T_EXPENSE)
                         .ToList();
                 }
                 else
@@ -207,11 +207,11 @@ namespace Financial.Pages
                         .Where(m => m.Date_Display_Filter == MonthYearPickerSelectedItem);
 
                     incomes = movements
-                        .Where(m => m.Type == App.INCOME)
+                        .Where(m => m.Type == App.T_INCOME)
                         .ToList();
 
                     expenses = movements
-                        .Where(m => m.Type == App.EXPENSE)
+                        .Where(m => m.Type == App.T_EXPENSE)
                         .ToList();
                 }
 

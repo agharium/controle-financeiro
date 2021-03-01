@@ -194,7 +194,7 @@ namespace Financial.Pages
 
             Incomes = new ObservableCollection<Movement>();
 
-            var incomes = App.Realm.All<Movement>().Where(i => i.Type == App.INCOME).OrderByDescending(i => i.Date).ToList();
+            var incomes = App.Realm.All<Movement>().Where(i => i.Type == App.T_INCOME).OrderByDescending(i => i.Date).ToList();
             MonthYearPickerItemsSource = incomes.Select(i => i.Date_Display_Filter).Distinct().ToList();
             if (!string.IsNullOrEmpty(App.HomePageSelectedDateFilter) && MonthYearPickerItemsSource.Contains(App.HomePageSelectedDateFilter))
                 MonthYearPickerSelectedItem = App.HomePageSelectedDateFilter;
@@ -208,7 +208,7 @@ namespace Financial.Pages
             if (selectLastItemFilter)
                 filterToSelect = App.Realm.All<Movement>().OrderByDescending(i => i.Id).First().Date_Display_Filter;
 
-            var incomes = App.Realm.All<Movement>().Where(i => i.Type == App.INCOME).OrderByDescending(i => i.Date).ToList();
+            var incomes = App.Realm.All<Movement>().Where(i => i.Type == App.T_INCOME).OrderByDescending(i => i.Date).ToList();
             MonthYearPickerItemsSource = incomes.Select(i => i.Date_Display_Filter).Distinct().ToList();
 
             string whereItIs = MonthYearPickerSelectedItem;
@@ -233,7 +233,7 @@ namespace Financial.Pages
 
             if (!string.IsNullOrWhiteSpace(MonthYearPickerSelectedItem))
             {
-                var incomes = App.Realm.All<Movement>().Where(i => i.Type == App.INCOME).OrderByDescending(i => i.Date).ToList();
+                var incomes = App.Realm.All<Movement>().Where(i => i.Type == App.T_INCOME).OrderByDescending(i => i.Date).ToList();
                 incomes = incomes.Where(m => m.Date_Display_Filter == MonthYearPickerSelectedItem).ToList();
                 IncomesBackup = Incomes = new ObservableCollection<Movement>(incomes);
             }
@@ -241,7 +241,7 @@ namespace Financial.Pages
                 IncomesBackup = Incomes = new ObservableCollection<Movement>();
 
             var deductable = App.Realm.All<Movement>()
-                .Where(m => m.Type == App.EXPENSE)
+                .Where(m => m.Type == App.T_EXPENSE)
                 .Where(m => m.IsTitheable)
                 .Where(m => !m.Handed)
                 .ToList()
@@ -262,7 +262,7 @@ namespace Financial.Pages
             TipIsVisible = Incomes.Count() == 0;
         }
 
-        private void OpenHandleMovementPopupSaveIncome() => PopupNavigation.Instance.PushAsync(new HandleMovementPopup(App.INCOME, App.OP_SAVE));
+        private void OpenHandleMovementPopupSaveIncome() => PopupNavigation.Instance.PushAsync(new HandleMovementPopup(App.T_INCOME, App.OP_SAVE));
 
         private async void OpenMovementDetailsPopupIncome(Movement Income) => await PopupNavigation.Instance.PushAsync(new MovementDetailsPopup(Income));
 
@@ -291,12 +291,12 @@ namespace Financial.Pages
                 //        UpdateCollection();
                 //        App.Toast("Dízimo entregue com sucesso.");
 
-                //        var expense = new Movement(App.EXPENSE, Convert.ToDouble(Income.Value * 0.1), "Dízimo de " + Income.Value_Display, DateTime.Now, false);
+                //        var expense = new Movement(App.T_EXPENSE, Convert.ToDouble(Income.Value * 0.1), "Dízimo de " + Income.Value_Display, DateTime.Now, false);
                 //        App.Realm.Write(() => { App.Realm.Add(expense); });
                 //    }
                 //    break;
                 case "Editar":
-                    await PopupNavigation.Instance.PushAsync(new HandleMovementPopup(App.INCOME, App.OP_UPDATE, Income));
+                    await PopupNavigation.Instance.PushAsync(new HandleMovementPopup(App.T_INCOME, App.OP_UPDATE, Income));
                     break;
                 case "Excluir":
                     var extra = Income.Handed ? " Esta entrada também representa um dízimo já entregue e uma despesa foi registrada referente à sua entrega." : "";
@@ -347,11 +347,10 @@ namespace Financial.Pages
                 }
 
                 var deductables = App.Realm.All<Movement>()
-                    .Where(m => m.Type == App.EXPENSE)
+                    .Where(m => m.Type == App.T_EXPENSE)
                     .Where(m => m.IsTitheable)
                     .Where(i => !i.Handed)
-                    .ToList()
-                    .Where(m => m.Date_Display_Filter == MonthYearPickerSelectedItem);
+                    .ToList();
 
                 foreach (var d in deductables)
                 {
@@ -366,7 +365,7 @@ namespace Financial.Pages
                 App.Toast("Dízimos entregues.");
 
                 var total = incomes.Sum(i => i.Value) - deductables.Sum(d => d.Value);
-                var expense = new Movement(App.EXPENSE, total * 0.1, "Dízimos de " + (total).ToString("C", CultureInfo.CurrentCulture), DateTime.Now, false, true);
+                var expense = new Movement(App.T_EXPENSE, total * 0.1, "Dízimos de " + (total).ToString("C", CultureInfo.CurrentCulture), DateTime.Now, false, true);
                 App.Realm.Write(() => { App.Realm.Add(expense); });
                 App.ExpensesViewModel.UpdateCollection();
             }

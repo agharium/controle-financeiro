@@ -88,14 +88,14 @@ namespace Financial.Pages.Popups
             MaxDate = Date.AddMonths(1);
             Description = "";
 
-            IsTitheableText = Type == App.INCOME ? "Entregar dízimos desta entrada" : "Deduzir esta despesa no cálculo dos dízimos";
+            IsTitheableText = Type == App.T_INCOME ? "Entregar dízimos desta entrada" : "Deduzir esta despesa no cálculo dos dízimos";
             IsTitheableColor = ((Color)Application.Current.Resources["PrimaryColor"]).ToHex();
             IsTitheableVisible = IsTitheableEnabled = App.UserGivesTithes;
             ToggleIsTitheableCommand = new Command(ToggleIsTitheable);
 
             if (Operation == App.OP_SAVE)
             {
-                if (Type == App.INCOME)
+                if (Type == App.T_INCOME)
                 {
                     SaveMovementCommand = new Command(SaveIncome);
                     IsTitheable = IsTitheableVisible;
@@ -116,24 +116,24 @@ namespace Financial.Pages.Popups
                 if (!IsTitheableEnabled)
                     IsTitheableColor = "Gray";
 
-                SaveMovementCommand = Type == App.INCOME ? new Command(UpdateIncome) : new Command(UpdateExpense);
+                SaveMovementCommand = Type == App.T_INCOME ? new Command(UpdateIncome) : new Command(UpdateExpense);
 
                 Title = "Editar ";
             }
 
-            Title += Type == App.INCOME ? "entrada" : "despesa";
+            Title += Type == App.T_INCOME ? "entrada" : "despesa";
 
-            //if (Type == App.INCOME && Operation == App.OP_SAVE)
+            //if (Type == App.T_INCOME && Operation == App.OP_SAVE)
             //{
             //    SaveMovementCommand = new Command(SaveIncome);
             //    IsTitheable = IsTitheableVisible;
-            //} else if (Type == App.INCOME && Operation == App.OP_UPDATE)
+            //} else if (Type == App.T_INCOME && Operation == App.OP_UPDATE)
             //    SaveMovementCommand = new Command(UpdateIncome);
-            //else if (Type == App.EXPENSE && Operation == App.OP_SAVE)
+            //else if (Type == App.T_EXPENSE && Operation == App.OP_SAVE)
             //{
             //    SaveMovementCommand = new Command(SaveExpense);
             //    IsTitheable = !IsTitheableVisible;
-            //} else if (Type == App.EXPENSE && Operation == App.OP_UPDATE)
+            //} else if (Type == App.T_EXPENSE && Operation == App.OP_UPDATE)
             //    SaveMovementCommand = new Command(UpdateExpense);
         }
 
@@ -141,7 +141,7 @@ namespace Financial.Pages.Popups
         {
             if (await FieldsVerification())
             {
-                var income = new Movement(App.INCOME, Convert.ToDouble(Value), Description, Date, IsTitheable);
+                var income = new Movement(App.T_INCOME, Convert.ToDouble(Value), Description, Date, IsTitheable);
                 App.Realm.Write(() => { App.Realm.Add(income); });
                 App.IncomesViewModel.UpdateCollection(true, true);
                 await PopupNavigation.Instance.PopAsync();
@@ -174,7 +174,7 @@ namespace Financial.Pages.Popups
         {
             if (await FieldsVerification())
             {
-                var expense = new Movement(App.EXPENSE, Convert.ToDouble(Value), Description, Date, IsTitheable, false);
+                var expense = new Movement(App.T_EXPENSE, Convert.ToDouble(Value), Description, Date, IsTitheable, false);
                 App.Realm.Write(() => { App.Realm.Add(expense); });
                 App.ExpensesViewModel.UpdateCollection(true, true);
                 App.IncomesViewModel.UpdateCollection();

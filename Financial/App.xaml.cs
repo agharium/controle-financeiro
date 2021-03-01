@@ -10,17 +10,17 @@ namespace Financial
      * - Em HandleMovementPopup/MovementDetailsPopup ajustar os botões para ficarem na mesma linha, para não ter que rolar o popup para visualizar tudo, de forma completa;
      * - Possibilitar maneira de entregar os dízimos SEM descontar os deduzíveis (ActionSheet/DisplayAlert ao tocar no botão?);
      * - Mostrar somente os números do resumo até o dia atual, quando estiver selecionado o mês atual;
-     * - Talvez fazer uma opção global que permita desabilitar despesas deduzíveis no app inteiro, assim como funciona com os dízimos? Não sei.. Talvez. Vamos ver como segue;
+     * - Talvez fazer uma opção global que permita desabilitar a "dedutibilidade" de despesas no app inteiro, assim como funciona com os dízimos? Não sei.. Talvez. Vamos ver como segue;
      * - No cálculo de dízimos, deve ser levado em conta as despesas deduzíveis de TODO o histórico, não somente do mês atual (como está atualmente);
      * - Mostrar no MovementDetailsPopup dados acerca de dízimos e dedução; e
      * - Focus no primeiro input em HandleMovementPopup quando o tipo da operação for SAVE.
     */
     public partial class App : Application
     {
-        public const int INCOME = 0;
-        public const int EXPENSE = 1;
-        public const int OP_SAVE = 0;
-        public const int OP_UPDATE = 1;
+        public const int T_INCOME   = 0;
+        public const int T_EXPENSE  = 1;
+        public const int OP_SAVE    = 0;
+        public const int OP_UPDATE  = 1;
 
         public static bool HOMEPAGE_NEEDS_UPDATE = false;
 

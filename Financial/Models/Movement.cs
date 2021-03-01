@@ -46,7 +46,7 @@ namespace Financial.Models
         {
             get => 
                 IsTitheable && App.UserGivesTithes
-                    ? Type == App.INCOME
+                    ? Type == App.T_INCOME
                         ? "(10%) " + (Value * 0.1).ToString("C", CultureInfo.CurrentCulture)
                         : Handed
                             ? "Deduzido"

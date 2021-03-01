@@ -45,7 +45,7 @@ namespace Financial.Pages.Popups
             Value = Movement.Value_Display;
             Date = Movement.Date_Display;
 
-            TithesIsVisible = App.UserGivesTithes && Movement.Type == App.INCOME && Movement.IsTitheable;
+            TithesIsVisible = App.UserGivesTithes && Movement.Type == App.T_INCOME && Movement.IsTitheable;
             if (TithesIsVisible)
             {
                 Tithes = Movement.Tithes_Display.Remove(0, 6);
@@ -65,8 +65,8 @@ namespace Financial.Pages.Popups
 
         private async void DeleteMovement()
         {
-            var strType = Movement.Type == App.INCOME ? "entrada" : "despesa";
-            var strExtra = Movement.Type == App.INCOME && Movement.Handed ? " Esta entrada também representa um dízimo já entregue e uma despesa foi registrada referente à sua entrega." : "";
+            var strType = Movement.Type == App.T_INCOME ? "entrada" : "despesa";
+            var strExtra = Movement.Type == App.T_INCOME && Movement.Handed ? " Esta entrada também representa um dízimo já entregue e uma despesa foi registrada referente à sua entrega." : "";
             if (await Shell.Current.DisplayAlert("Confirmação", $"Tem certeza que deseja excluir esta {strType}?{strExtra}", "Sim", "Não"))
             {
                 using (var trans = App.Realm.BeginWrite())
@@ -76,7 +76,7 @@ namespace Financial.Pages.Popups
                     App.Realm.Remove(Movement);
                     trans.Commit();
 
-                    if (MovementType == App.INCOME)
+                    if (MovementType == App.T_INCOME)
                         App.IncomesViewModel.UpdateCollection(true, false, true);
                     else
                         App.ExpensesViewModel.UpdateCollection(true, false, true);

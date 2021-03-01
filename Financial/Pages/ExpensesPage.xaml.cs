@@ -125,7 +125,7 @@ namespace Financial.Pages
             
             Expenses = new ObservableCollection<Movement>();
 
-            var expenses = App.Realm.All<Movement>().Where(i => i.Type == App.EXPENSE).OrderByDescending(i => i.Date).ToList();
+            var expenses = App.Realm.All<Movement>().Where(i => i.Type == App.T_EXPENSE).OrderByDescending(i => i.Date).ToList();
             MonthYearPickerItemsSource = expenses.Select(i => i.Date_Display_Filter).Distinct().ToList();
             if (!string.IsNullOrEmpty(App.HomePageSelectedDateFilter) && MonthYearPickerItemsSource.Contains(App.HomePageSelectedDateFilter))
                 MonthYearPickerSelectedItem = App.HomePageSelectedDateFilter;
@@ -139,7 +139,7 @@ namespace Financial.Pages
             if (selectLastItemFilter)
                 filterToSelect = App.Realm.All<Movement>().OrderByDescending(i => i.Id).First().Date_Display_Filter;
 
-            var expenses = App.Realm.All<Movement>().Where(i => i.Type == App.EXPENSE).OrderByDescending(i => i.Date).ToList();
+            var expenses = App.Realm.All<Movement>().Where(i => i.Type == App.T_EXPENSE).OrderByDescending(i => i.Date).ToList();
             MonthYearPickerItemsSource = expenses.Select(e => e.Date_Display_Filter).Distinct().ToList();
 
             string whereItIs = MonthYearPickerSelectedItem;
@@ -164,7 +164,7 @@ namespace Financial.Pages
 
             if (!string.IsNullOrWhiteSpace(MonthYearPickerSelectedItem))
             {
-                var expenses = App.Realm.All<Movement>().Where(i => i.Type == App.EXPENSE).OrderByDescending(i => i.Date).ToList();
+                var expenses = App.Realm.All<Movement>().Where(i => i.Type == App.T_EXPENSE).OrderByDescending(i => i.Date).ToList();
                 expenses = expenses.Where(m => m.Date_Display_Filter == MonthYearPickerSelectedItem).ToList();
                 ExpensesBackup = Expenses = new ObservableCollection<Movement>(expenses);
             }
@@ -177,7 +177,7 @@ namespace Financial.Pages
             TipIsVisible = Expenses.Count() == 0 ? true : false;
         }
 
-        private void OpenHandleMovementPopupSaveExpense() => PopupNavigation.Instance.PushAsync(new HandleMovementPopup(App.EXPENSE, App.OP_SAVE));
+        private void OpenHandleMovementPopupSaveExpense() => PopupNavigation.Instance.PushAsync(new HandleMovementPopup(App.T_EXPENSE, App.OP_SAVE));
 
         private async void OpenMovementDetailsPopupExpense(Movement Expense) => await PopupNavigation.Instance.PushAsync(new MovementDetailsPopup(Expense));
 
@@ -189,7 +189,7 @@ namespace Financial.Pages
             switch (actionSheet)
             {
                 case "Editar":
-                    await PopupNavigation.Instance.PushAsync(new HandleMovementPopup(App.EXPENSE, App.OP_UPDATE, Expense));
+                    await PopupNavigation.Instance.PushAsync(new HandleMovementPopup(App.T_EXPENSE, App.OP_UPDATE, Expense));
                     break;
                 case "Excluir":
                     if (await Shell.Current.DisplayAlert("Confirmação", "Tem certeza que deseja excluir esta despesa?", "Sim", "Não"))

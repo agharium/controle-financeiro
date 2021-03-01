@@ -27,11 +27,6 @@
                             FontSize="Medium"
                             TextColor="#262626"
                             HorizontalOptions="Center"/>
-                        <Entry
-                            Text="{Binding Value}"
-                            HorizontalOptions="Fill"
-                            Placeholder="Valor"
-                            Keyboard="Numeric"/>
                         <!--<Entry
                             Text="{Binding Description}"
                             HorizontalOptions="Fill"
@@ -45,6 +40,11 @@
                             PlaceholderTextColor="#9e9e9e"
                             TextChanged="AutoSuggestBox_TextChanged"
                             SuggestionChosen="AutoSuggestBox_SuggestionChosen"/>
+                        <Entry
+                            Text="{Binding Value}"
+                            HorizontalOptions="Fill"
+                            Placeholder="Valor"
+                            Keyboard="Numeric"/>
                         <DatePicker 
                             Date="{Binding Date}"
                             MaximumDate="{Binding MaxDate}"
