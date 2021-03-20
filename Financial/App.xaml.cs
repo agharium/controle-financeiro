@@ -11,7 +11,7 @@ namespace Financial
      * - Possibilitar maneira de entregar os dízimos SEM descontar os deduzíveis (ActionSheet/DisplayAlert ao tocar no botão?);
      * - Mostrar somente os números do resumo até o dia atual, quando estiver selecionado o mês atual;
      * - Talvez fazer uma opção global que permita desabilitar a "dedutibilidade" de despesas no app inteiro, assim como funciona com os dízimos? Não sei.. Talvez. Vamos ver como segue;
-     * - No cálculo de dízimos, deve ser levado em conta as despesas deduzíveis de TODO o histórico, não somente do mês atual (como está atualmente);
+     * - [DONE] No cálculo de dízimos, deve ser levado em conta as despesas deduzíveis de TODO o histórico, não somente do mês atual (como está atualmente);
      * - Mostrar no MovementDetailsPopup dados acerca de dízimos e dedução; e
      * - Focus no primeiro input em HandleMovementPopup quando o tipo da operação for SAVE.
     */
