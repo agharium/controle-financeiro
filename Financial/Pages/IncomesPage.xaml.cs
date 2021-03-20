@@ -245,12 +245,12 @@ namespace Financial.Pages
                 .Where(m => m.IsTitheable)
                 .Where(m => !m.Handed)
                 .ToList()
-                .Where(m => m.Date_Display_Filter == MonthYearPickerSelectedItem)
+                //.Where(m => m.Date_Display_Filter == MonthYearPickerSelectedItem)
                 .Sum(m => m.Value);
 
             var revenues = Incomes.Sum(i => i.Value);
             var remainingTithes = (Incomes.Where(i => i.IsTitheable == true).Where(i => i.Handed == false).Sum(i => i.Value) - deductable) * .1;
-            var totalTithes = Incomes.Where(i => i.IsTitheable == true).Sum(i => i.Value) * 0.1;
+            var totalTithes = Incomes.Where(i => i.IsTitheable == true).Sum(i => i.Value) * .1;
 
             Revenues = revenues.ToString("C", CultureInfo.CurrentCulture);
             RemainingTithes = remainingTithes.ToString("C", CultureInfo.CurrentCulture);

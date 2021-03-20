@@ -46,18 +46,26 @@ namespace Financial.Pages
 
         public void OnForwardSwipe(object sender, SwipedEventArgs e)
         {
-            if (MonthYearPicker.SelectedIndex < MonthYearPicker.Items.Count - 1)
-                MonthYearPicker.SelectedIndex++;
-            else
-                MonthYearPicker.SelectedIndex = 0;
+            MonthYearPicker.SelectedIndex = (MonthYearPicker.SelectedIndex < MonthYearPicker.Items.Count - 1)
+                ? MonthYearPicker.SelectedIndex + 1
+                : 0;
+                
+            //if (MonthYearPicker.SelectedIndex < MonthYearPicker.Items.Count - 1)
+            //    MonthYearPicker.SelectedIndex++;
+            //else
+            //    MonthYearPicker.SelectedIndex = 0;
         }
 
         public void OnBackwardSwipe(object sender, SwipedEventArgs e)
         {
-            if (MonthYearPicker.SelectedIndex > 0)
-                MonthYearPicker.SelectedIndex--;
-            else
-                MonthYearPicker.SelectedIndex = MonthYearPicker.Items.Count - 1;
+            MonthYearPicker.SelectedIndex = (MonthYearPicker.SelectedIndex > 0)
+                ? MonthYearPicker.SelectedIndex - 1
+                : MonthYearPicker.Items.Count - 1;
+
+            //if (MonthYearPicker.SelectedIndex > 0)
+            //    MonthYearPicker.SelectedIndex--;
+            //else
+            //    MonthYearPicker.SelectedIndex = MonthYearPicker.Items.Count - 1;
         }
     }
 
@@ -215,19 +223,19 @@ namespace Financial.Pages
                         .ToList();
                 }
 
-                double totalIncome, totalExpense, totalTitheable, deductable;
+                double totalIncome, totalExpense, totalTitheable/*, deductable*/;
 
                 totalIncome = incomes.Sum(m => m.Value);
                 totalExpense = expenses.Sum(m => m.Value);
 
-                deductable = expenses
-                    .Where(m => m.IsTitheable)
-                    .Sum(m => m.Value);
+                //deductable = expenses
+                //    .Where(m => m.IsTitheable)
+                //    .Sum(m => m.Value);
 
                 totalTitheable = incomes
                     .Where(m => m.IsTitheable)
                     .Sum(m => m.Value)
-                    - deductable;
+                    /*- deductable*/;
 
                 TotalIncome = totalIncome.ToString("C", CultureInfo.CurrentCulture);
                 TotalExpense = totalExpense.ToString("C", CultureInfo.CurrentCulture);
